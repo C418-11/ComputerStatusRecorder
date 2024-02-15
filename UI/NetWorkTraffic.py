@@ -5,6 +5,7 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
 
 import os
+import threading
 import warnings
 from threading import Thread
 
@@ -23,6 +24,22 @@ import time
 from PyQt5.QtWidgets import QLabel, QPushButton
 
 from .tools import showException
+
+
+def _render_plot(ax, sent, recv):
+    # cover 将 [(x1, y1), (x2, y2), ...] 转换为 ([x1, x2, ...,], [y1, y2, ...])
+    def _cover(ls):
+        x = [t for t, _ in ls]
+        y = [v for _, v in ls]
+        return x, y
+
+    ax.plot(*_cover(sent), color='red', label='sent')
+    ax.plot(*_cover(recv), color='blue', label='recv')
+
+    ax.set_xlabel('Timestamp')
+    ax.set_ylabel('Bytes')
+
+    ax.legend(loc='upper left', fontsize=10)
 
 
 class NetWorkTraffic(AbcUI):
@@ -54,6 +71,8 @@ class NetWorkTraffic(AbcUI):
 
         self.SaveFileButton: QPushButton | None = None
         self.SavePlotButton: QPushButton | None = None
+
+        self.PlotRenderLock = threading.Lock()
 
         self.show_getter = NetIoTraffic(
             max_record_len=self._configs["[Show]"]["Max Record"],
@@ -101,7 +120,9 @@ class NetWorkTraffic(AbcUI):
         life = f"Time[Start[{time_str}],Finish[{finish_str}]]"
 
         file_path = os.path.join(dir_path, f"{life}.png")
-        self.plot_widget.figure.savefig(file_path)
+
+        with self.PlotRenderLock:
+            self.plot_widget.figure.savefig(file_path)
 
         msg_box = QMessageBox()
         msg_box.setWindowTitle("Tip")
@@ -169,21 +190,7 @@ class NetWorkTraffic(AbcUI):
 
     def _show_loop(self):
         ax = self.plot_widget.figure.subplots()
-
-        def _show(sent, recv):
-            # cover 将 [(x1, y1), (x2, y2), ...] 转换为 ([x1, x2, ...,], [y1, y2, ...])
-            def _cover(ls):
-                x = [t for t, _ in ls]
-                y = [v for _, v in ls]
-                return x, y
-
-            ax.plot(*_cover(sent), color='red', label='sent')
-            ax.plot(*_cover(recv), color='blue', label='recv')
-
-            ax.set_xlabel('Timestamp')
-            ax.set_ylabel('Bytes')
-
-            ax.legend(loc='upper left', fontsize=10)
+        self.ax = ax
 
         if self._configs["[Show]"].get_default("Fill Default", True):
             config_show = self._configs["[Show]"]
@@ -207,7 +214,9 @@ class NetWorkTraffic(AbcUI):
                 f"  Recv: {round(self.show_getter.recv_unit[0], 2)} {self.show_getter.recv_unit[1].abbreviation}"
             )
 
-            _show(self.show_getter.this_sent_que, self.show_getter.this_recv_que)
+            with self.PlotRenderLock:
+                ax.clear()
+                _render_plot(ax, self.show_getter.this_sent_que, self.show_getter.this_recv_que)
 
             try:
                 self.plot_widget.canvas.draw()
@@ -223,8 +232,6 @@ class NetWorkTraffic(AbcUI):
                     raise
 
             time.sleep(self._configs["[Show]"]["Record Delay"])
-
-            ax.clear()
 
     def _record_loop(self):
         while self.running:
