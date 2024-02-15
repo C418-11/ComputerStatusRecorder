@@ -1,0 +1,6 @@
+/.configs/
+/.venv312/
+/dist/
+/build/
+/.idea/
+*.spec
