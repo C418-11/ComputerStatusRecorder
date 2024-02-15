@@ -4,6 +4,7 @@
 __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.2Dev"
 
+import traceback
 from typing import override
 
 from PyQt5.QtCore import *
@@ -27,7 +28,10 @@ class CustomQMenuBar(QMenuBar):
     @override
     def mousePressEvent(self, event, *_):
         # noinspection PyUnresolvedReferences
-        if event.button() == Qt.LeftButton:
+        root_is_maximized = self.parent().parent().isMaximized()
+
+        # noinspection PyUnresolvedReferences
+        if event.button() == Qt.LeftButton and not root_is_maximized:
             self.base_position = event.screenPos(), event.localPos()
         super().mousePressEvent(event)
 
@@ -35,7 +39,10 @@ class CustomQMenuBar(QMenuBar):
     @override
     def mouseMoveEvent(self, event, *_):
         # noinspection PyUnresolvedReferences
-        if event.buttons() == Qt.LeftButton and not self.isMaximized():
+        root_is_maximized = self.parent().parent().isMaximized()
+
+        # noinspection PyUnresolvedReferences
+        if event.buttons() == Qt.LeftButton and not root_is_maximized:
             if abs(self.base_position[0].x() - event.screenPos().x()) > 0.8 and abs(
                     self.base_position[0].y() - event.screenPos().y()) > 0.8:
 
@@ -150,8 +157,13 @@ class UiMain:
 
         for tab in self.top_tabs:
             try:
-                tab.ReScale(x_scale, y_scale)
+                func = tab.ReScale
             except AttributeError:
+                continue
+            try:
+                func(x_scale, y_scale)
+            except Exception as e:
+                traceback.print_exception(e)
                 pass
 
     def ReTranslateUi(self):
