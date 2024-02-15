@@ -62,12 +62,12 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.stdout = StdColor.ColorWrite(sys.stdout, colorama.Fore.LIGHTGREEN_EX)
+    sys.stdout = StdColor.ColorWrite(sys.__stdout__, colorama.Fore.LIGHTGREEN_EX)
     print(f"Version: {__version__}")
     print(f"Author: {__author__}")
     print(f"版本号: {__version__}")
     print(f"作者: {__author__}")
-    sys.stdout = StdColor.ColorWrite(sys.stdout, colorama.Fore.LIGHTYELLOW_EX)
+    sys.stdout = StdColor.ColorWrite(sys.__stdout__, colorama.Fore.LIGHTYELLOW_EX)
     main()
 
 __all__ = ("main",)

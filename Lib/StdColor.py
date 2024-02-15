@@ -9,6 +9,15 @@ import sys
 import colorama
 
 
+def file_is_empty(func):
+    def wrapper(self, *args, **kwargs):
+        if self.super_ is None:
+            return
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
 class ColorWrite:
     """
     Output to the specified color
@@ -20,15 +29,16 @@ class ColorWrite:
         self.font_color = font_color
         self.bg_color = bg_color
 
+    @file_is_empty
     def write(self, text):
         pre = ""
         if self.font_color is not None:
             pre += self.font_color
         if self.bg_color is not None:
             pre += self.bg_color
-
         self.super_.write(pre + text + colorama.Style.RESET_ALL)
 
+    @file_is_empty
     def flush(self):
         self.super_.flush()
 
