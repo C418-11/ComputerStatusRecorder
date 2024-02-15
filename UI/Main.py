@@ -2,13 +2,14 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Dev"
+__version__ = "0.0.2Dev"
 
+from typing import override
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from UI.ABC_UI import AbcUI
+from UI.ABC import AbcUI
 from UI.BaseWidgets import GetScale
 from UI.tools import showException
 from Lib.Configs import MinimumSize
@@ -23,6 +24,7 @@ class CustomQMenuBar(QMenuBar):
         self.base_position = None
 
     @showException
+    @override
     def mousePressEvent(self, event, *_):
         # noinspection PyUnresolvedReferences
         if event.button() == Qt.LeftButton:
@@ -30,6 +32,7 @@ class CustomQMenuBar(QMenuBar):
         super().mousePressEvent(event)
 
     @showException
+    @override
     def mouseMoveEvent(self, event, *_):
         # noinspection PyUnresolvedReferences
         if event.buttons() == Qt.LeftButton and not self.isMaximized():
@@ -68,7 +71,7 @@ class UiMain:
     def append(self, widget: type[AbcUI]):
         widget = widget(self.TopTab)
         widget.setupUi()
-        self.TopTab.addTab(widget.getItemWidget(), widget.getTagName())
+        self.TopTab.addTab(widget.getMainWidget(), widget.getTagName())
         self.top_tabs.append(widget)
 
     @showException
@@ -125,6 +128,7 @@ class UiMain:
 
         self.Widget.scaleChanged.connect(self.AutoResize)
 
+        # noinspection PyArgumentList
         QMetaObject.connectSlotsByName(self.Widget)
 
     @showException
@@ -151,13 +155,14 @@ class UiMain:
                 pass
 
     def ReTranslateUi(self):
-        self.Widget.setWindowTitle(QCoreApplication.translate("MainUi", u"StatusRecorder", None))
-        self.ExitButton.setText(QCoreApplication.translate("MainUi", u"Exit", None))
-        self.MinButton.setText(QCoreApplication.translate("MainUi", u"Min", None))
+        self.Widget.setWindowTitle(u"StatusRecorder")
+        self.ExitButton.setText(u"Exit")
+        self.MinButton.setText(u"Min")
+
         if self.Widget.isMaximized():
-            self.MaxNormalButton.setText(QCoreApplication.translate("MainUi", u"Normal", None))
+            self.MaxNormalButton.setText(u"Normal")
         else:
-            self.MaxNormalButton.setText(QCoreApplication.translate("MainUi", u"Max", None))
+            self.MaxNormalButton.setText(u"Max")
 
 
 __all__ = ("UiMain", )

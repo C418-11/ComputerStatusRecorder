@@ -18,9 +18,21 @@ class AbcUI(ABC):
         ...
 
     @abstractmethod
-    def getItemWidget(self):
+    def getMainWidget(self):
         ...
 
     @abstractmethod
     def getTagName(self):
+        ...
+
+
+class AbcMenu(ABC):
+    def __init__(self, _parent: QMenuBar): ...
+
+    @abstractmethod
+    def setupUi(self):
+        ...
+
+    @abstractmethod
+    def getMenuWidget(self):
         ...

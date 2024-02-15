@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 # cython: language_level = 3
 
+__author__ = "C418____11 <553515788@qq.com>"
+__version__ = "0.0.2Dev"
+
 import yaml
 
 import os
 
 
-def read_default_yaml(path: str, default_dict: dict):
+def read_default_yaml(path: str, default_config):
     if not os.path.exists(path):
         with open(path, 'w') as f:
-            yaml.safe_dump(default_dict, f)
+            yaml.safe_dump(default_config, f)
     with open(path, 'r') as f:
         return Config(yaml.safe_load(f), file_path=path)
 
@@ -57,22 +60,11 @@ class Config:
     def keys(self):
         return self._config.keys()
 
+    def __repr__(self):
+        return f"<Config raw={self._config} path={self._path_from_root} file={self._file_path}>"
+
     def __iter__(self):
-        class ConfigIterator:
-            def __init__(self, configobj):
-                self.configobj = configobj
-                self.keys = list(configobj.keys())
-
-            def __iter__(self):
-                return self
-
-            def __next__(self):
-                if not len(self.keys):
-                    raise StopIteration
-                key = self.keys.pop(0)
-                return key, self.configobj[key]
-
-        return ConfigIterator(self)
+        return iter(self._config)
 
     def __contains__(self, item):
         return item in self._config
@@ -90,15 +82,12 @@ class Config:
             return ret
 
 
-_screen = read_default_yaml(
-    os.path.join(BASE_PATH, 'Screen.yaml'),
-    {
-        "MinimumSize": {
-            "width": 680,
-            "height": 520
-        }
+_screen = read_default_yaml(os.path.join(BASE_PATH, 'Screen.yaml'), {
+    "MinimumSize": {
+        "width": 680,
+        "height": 520
     }
-)
+})
 
 try:
     MinimumSize = tuple(int(_screen["MinimumSize"][key]) for key in ("width", "height"))

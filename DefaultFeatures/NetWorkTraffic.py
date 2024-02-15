@@ -8,6 +8,7 @@ import os
 import threading
 import warnings
 from threading import Thread
+from typing import override
 
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtGui import QDesktopServices
@@ -15,7 +16,7 @@ from PyQt5.QtWidgets import *
 
 from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
 from Recorder.NetworkIoTraffic import NetIoTraffic
-from UI.ABC_UI import AbcUI
+from UI.ABC import AbcUI
 from UI.BaseWidgets import MatplotlibWidget
 from UI.RegisterUI import register
 
@@ -23,7 +24,7 @@ import time
 
 from PyQt5.QtWidgets import QLabel, QPushButton
 
-from .tools import showException
+from UI.tools import showException
 
 
 def _render_plot(ax, sent, recv):
@@ -43,22 +44,19 @@ def _render_plot(ax, sent, recv):
 
 
 class NetWorkTraffic(AbcUI):
-    _configs = read_default_yaml(
-        os.path.join(BASE_PATH, 'NetWorkTraffic.yaml'),
-        {
-            "[Show]": {
-                "Max Record": 50,
-                "Record Delay": 0.5,
-                "Fill Default": True,
-                "Path": r"./.record/NetWorkTraffic/",
-            },
-            "[Record]": {
-                "Max Record": 50,
-                "Record Delay": 0.5,
-                "Path": r"./.record/NetWorkTraffic/",
-            },
-        }
-    )
+    _configs = read_default_yaml(os.path.join(BASE_PATH, 'NetWorkTraffic.yaml'), {
+        "[Show]": {
+            "Max Record": 50,
+            "Record Delay": 0.5,
+            "Fill Default": True,
+            "Path": r"./.record/NetWorkTraffic/",
+        },
+        "[Record]": {
+            "Max Record": 50,
+            "Record Delay": 0.5,
+            "Path": r"./.record/NetWorkTraffic/",
+        },
+    })
 
     def __init__(self, parent: QTabWidget):
         super().__init__(parent)
@@ -139,6 +137,7 @@ class NetWorkTraffic(AbcUI):
         if response == QMessageBox.Ok:
             QDesktopServices.openUrl(QUrl.fromLocalFile(file_path))
 
+    @override
     def ReScale(self, x_scale: float, y_scale: float):
         self.plot_widget.resize(int(self.base_wh[0] * x_scale), int(self.base_wh[1] * y_scale))
         self.plot_widget.canvas.draw()
@@ -157,6 +156,7 @@ class NetWorkTraffic(AbcUI):
             int(MinimumSize[1] * y_scale) - self.SaveFileButton.height() * 2
         )
 
+    @override
     def setupUi(self):
         self.tag_widget = QWidget(self.Widget)
         self.tag_widget.setObjectName("NetWorkTraffic")
@@ -247,9 +247,11 @@ class NetWorkTraffic(AbcUI):
                 self.record_getter.update()
             time.sleep(self._configs["[Record]"]["Record Delay"])
 
-    def getItemWidget(self):
+    @override
+    def getMainWidget(self):
         return self.tag_widget
 
+    @override
     def getTagName(self):
         return self.tag_widget.objectName()
 
