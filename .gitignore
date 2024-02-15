@@ -6,4 +6,4 @@
 /.record/
 /Releases Markdown/
 *.spec
-Pyinstaller_Build_EXE.bat
+Build_EXE.txt
