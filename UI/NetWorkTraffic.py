@@ -78,14 +78,16 @@ class NetWorkTraffic(AbcUI):
         msg_box = QMessageBox()
         msg_box.setWindowTitle("Tip")
         msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("File saved:\n"
+
+        msg_box.setText("Do you want to open the folder in which the file is saved?\n\n"
+                        "File saved:\n"
                         f"  {file_paths[0]}\n"
-                        f"  {file_paths[1]}\n\n" +
-                        "Do you want to open the folder in which the file is saved?\n"*3)
+                        f"  {file_paths[1]}")
+
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         response = msg_box.exec()
         if response == QMessageBox.Ok:
-            QDesktopServices.openUrl(QUrl.fromLocalFile(self.record_getter.file_path))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.join(self.record_getter.file_path, ".NetworkIoRecord")))
 
     @showException
     def _save_show_plot(self, *_):
@@ -104,13 +106,15 @@ class NetWorkTraffic(AbcUI):
         msg_box = QMessageBox()
         msg_box.setWindowTitle("Tip")
         msg_box.setIcon(QMessageBox.Information)
-        msg_box.setText("File saved:\n"
-                        f"  {dir_path}\n" +
-                        "Do you want to open the folder in which the file is saved?\n" * 3)
+
+        msg_box.setText("Do you want to open the saved picture?\n\n"
+                        "File saved:\n"
+                        f"  {dir_path}")
+
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         response = msg_box.exec()
         if response == QMessageBox.Ok:
-            QDesktopServices.openUrl(QUrl.fromLocalFile(self.record_getter.file_path))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(file_path))
 
     def ReScale(self, x_scale: float, y_scale: float):
         self.plot_widget.resize(int(self.base_wh[0] * x_scale), int(self.base_wh[1] * y_scale))
@@ -148,7 +152,7 @@ class NetWorkTraffic(AbcUI):
 
         self.SaveFileButton = QPushButton(self.Widget)
         self.SaveFileButton.setObjectName("SaveFileButton")
-        self.SaveFileButton.setText("Save")
+        self.SaveFileButton.setText("Save File")
 
         self.SavePlotButton = QPushButton(self.Widget)
         self.SavePlotButton.setObjectName("SavePlotButton")

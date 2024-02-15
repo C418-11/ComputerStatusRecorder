@@ -3,4 +3,5 @@
 /dist/
 /build/
 /.idea/
+/.record/
 *.spec
