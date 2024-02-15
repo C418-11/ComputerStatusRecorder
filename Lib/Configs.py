@@ -4,9 +4,9 @@
 __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.2Dev"
 
-import yaml
-
 import os
+
+import yaml
 
 
 def read_default_yaml(path: str, default_config):

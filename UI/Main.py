@@ -6,13 +6,13 @@ __version__ = "0.0.2Dev"
 
 from typing import override
 
-from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
+from Lib.Configs import MinimumSize
 from UI.ABC import AbcUI
 from UI.BaseWidgets import GetScale
 from UI.tools import showException
-from Lib.Configs import MinimumSize
 
 
 class CustomQMenuBar(QMenuBar):
@@ -40,7 +40,7 @@ class CustomQMenuBar(QMenuBar):
                     self.base_position[0].y() - event.screenPos().y()) > 0.8:
 
                 f_pos = event.screenPos() - self.base_position[1]
-                pos = QPoint(round(f_pos.x()), round(f_pos.y()-6.5))
+                pos = QPoint(round(f_pos.x()), round(f_pos.y() - 6.5))
                 self._move_func(pos)
             else:
                 self.base_position = event.screenPos(), event.localPos()
@@ -165,4 +165,4 @@ class UiMain:
             self.MaxNormalButton.setText(u"Max")
 
 
-__all__ = ("UiMain", )
+__all__ = ("UiMain",)

@@ -5,17 +5,16 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.2Bata"
 
 import sys
-import time
 
 import colorama
-from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
 
 import FeatureLoader
 from Lib import StdColor
+from UI import RegisterUI
 from UI.BaseWidgets import GetScale
 from UI.Main import UiMain
-from UI import RegisterUI
 
 
 def main():

@@ -194,7 +194,7 @@ def convert_to_best_unit(value: Decimal, unit: type[DataUnit]) -> tuple[Decimal,
 
 
 if __name__ == "__main__":
-    print(convert_to_best_unit(Decimal(8*1024**9), Bit))
+    print(convert_to_best_unit(Decimal(8 * 1024 ** 9), Bit))
 
 __all__ = (
     "DataUnit",

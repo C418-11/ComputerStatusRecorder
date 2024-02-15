@@ -4,8 +4,8 @@
 __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
 
-import os.path
 import importlib
+import os.path
 
 from Lib.Configs import read_default_yaml, BASE_PATH
 
@@ -19,7 +19,6 @@ DefaultFeatures = read_default_yaml(
 
 
 def load_default_features():
-
     def _load(name):
         if not DefaultFeatures[name]:
             return None
@@ -34,4 +33,4 @@ def load_default_features():
     return loaded_features
 
 
-__all__ = ("DefaultFeatures", "load_default_features", )
+__all__ = ("DefaultFeatures", "load_default_features",)

@@ -6,6 +6,7 @@ __version__ = "0.0.1Bata"
 
 import os
 import threading
+import time
 import warnings
 from threading import Thread
 from typing import override
@@ -13,17 +14,13 @@ from typing import override
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QLabel, QPushButton
 
 from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
 from Recorder.NetworkIoTraffic import NetIoTraffic
 from UI.ABC import AbcUI
 from UI.BaseWidgets import MatplotlibWidget
 from UI.RegisterUI import register
-
-import time
-
-from PyQt5.QtWidgets import QLabel, QPushButton
-
 from UI.tools import showException
 
 
