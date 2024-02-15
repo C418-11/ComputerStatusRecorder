@@ -4,5 +4,6 @@
 /build/
 /.idea/
 /.record/
+/Releases Markdown/
 *.spec
 Pyinstaller Build EXE.bat
