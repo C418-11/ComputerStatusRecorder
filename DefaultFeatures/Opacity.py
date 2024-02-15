@@ -5,6 +5,7 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
 
 import time
+import uuid
 
 from PyQt5.QtWidgets import QApplication, QMenu
 
@@ -18,16 +19,28 @@ class OpacityMenu(AbcMenu):
         super().__init__(_parent)
         self.widget = _parent
         self.menu: QMenu | None = None
+        self.animationRunning = None
 
     @showException
     def _gradient(self, to):
+        this_animation = uuid.uuid4()
+        self.animationRunning = this_animation
+
         _from = self.widget.windowOpacity()
         # 从_from渐变到to
         sub = (to - _from) / 100
+
         for i in range(100):
+            if self.animationRunning != this_animation:
+                return
+
             self.widget.setWindowOpacity(_from + i * sub)
             QApplication.processEvents()
             time.sleep(0.01)
+        self.widget.setWindowOpacity(to)
+
+        if self.animationRunning == this_animation:
+            self.animationRunning = None
 
     def getMenuWidget(self):
         return self.menu
