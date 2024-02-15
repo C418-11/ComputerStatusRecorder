@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Dev"
+__version__ = "0.0.1Bata"
 
 import os
 import threading
@@ -73,6 +73,7 @@ class NetWorkTraffic(AbcUI):
         self.SavePlotButton: QPushButton | None = None
 
         self.PlotRenderLock = threading.Lock()
+        self.PlotRecordLock = threading.Lock()
 
         self.show_getter = NetIoTraffic(
             max_record_len=self._configs["[Show]"]["Max Record"],
@@ -92,7 +93,8 @@ class NetWorkTraffic(AbcUI):
 
     @showException
     def _save_record(self, *_):
-        file_paths = self.record_getter.save()
+        with self.PlotRecordLock:
+            file_paths = self.record_getter.save()
 
         msg_box = QMessageBox()
         msg_box.setWindowTitle("Tip")
@@ -206,7 +208,7 @@ class NetWorkTraffic(AbcUI):
                 self.show_getter.this_sent_que.append((past_timestamp / record_delay_accuracy, 0))
                 self.show_getter.this_recv_que.append((past_timestamp / record_delay_accuracy, 0))
 
-        while self.running:
+        def _once():
             self.show_getter.update()
 
             self.TrafficLabel.setText(
@@ -218,24 +220,31 @@ class NetWorkTraffic(AbcUI):
                 ax.clear()
                 _render_plot(ax, self.show_getter.this_sent_que, self.show_getter.this_recv_que)
 
+            self.plot_widget.canvas.draw()
+
+            time.sleep(self._configs["[Show]"]["Record Delay"])
+
+        while self.running:
             try:
-                self.plot_widget.canvas.draw()
+                _once()
             except RuntimeError as err:
                 if "C/C++" in str(err) and "delete" in str(err):
-                    warnings.warn(
-                        "The program appears to be closed, stopping the drawing loop...",
-                        RuntimeWarning,
-                        stacklevel=1
-                    )
+                    try:
+                        warnings.warn(
+                            "The program appears to be closed, stopping the drawing loop...",
+                            RuntimeWarning,
+                            stacklevel=1
+                        )
+                    except RuntimeError:
+                        pass
                     return
                 else:
                     raise
 
-            time.sleep(self._configs["[Show]"]["Record Delay"])
-
     def _record_loop(self):
         while self.running:
-            self.record_getter.update()
+            with self.PlotRenderLock:
+                self.record_getter.update()
             time.sleep(self._configs["[Record]"]["Record Delay"])
 
     def getItemWidget(self):
