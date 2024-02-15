@@ -136,22 +136,25 @@ class NetWorkTraffic(AbcUI):
 
     @override
     def ReScale(self, x_scale: float, y_scale: float):
-        self.plot_widget.resize(int(self.base_wh[0] * x_scale), int(self.base_wh[1] * y_scale))
-        self.plot_widget.canvas.draw()
+        self.PlotRenderLock.acquire()
 
-        self.TrafficLabel.resize(int(MinimumSize[0] * x_scale), int(50 * y_scale))
-        self.TrafficLabel.move(0, int(20 * y_scale))
+        self.plot_widget.resize(int(self.base_wh[0] * x_scale), int(self.base_wh[1] * y_scale))
+
+        self.TrafficLabel.resize(int(MinimumSize[0] * x_scale), int(40 * y_scale))
+        self.TrafficLabel.move(0, 0)
         self.TrafficLabel.setAlignment(Qt.AlignCenter)
 
         # 保存按钮固定在左下角
         self.SaveFileButton.resize(int(100 * x_scale), int(30 * y_scale))
-        self.SaveFileButton.move(0, int(MinimumSize[1] * y_scale) - self.SaveFileButton.height() * 2)
+        self.SaveFileButton.move(0, self.plot_widget.height() - self.SavePlotButton.height())
 
         self.SavePlotButton.resize(int(100 * x_scale), int(30 * y_scale))
         self.SavePlotButton.move(
             self.SaveFileButton.width(),
-            int(MinimumSize[1] * y_scale) - self.SaveFileButton.height() * 2
+            self.SaveFileButton.y()
         )
+
+        self.PlotRenderLock.release()
 
     @override
     def setupUi(self):
@@ -165,16 +168,16 @@ class NetWorkTraffic(AbcUI):
         self.base_wh = MinimumSize[0] - 10, MinimumSize[1] - 50
         self.plot_widget.resize(*self.base_wh)
 
-        self.TrafficLabel = QLabel(self.Widget)
+        self.TrafficLabel = QLabel(self.tag_widget)
         self.TrafficLabel.setObjectName("NetWorkLabel")
         self.TrafficLabel.setAlignment(Qt.AlignCenter)
         self.TrafficLabel.setStyleSheet("font-size: 20px;font-weight: bold;")
 
-        self.SaveFileButton = QPushButton(self.Widget)
+        self.SaveFileButton = QPushButton(self.tag_widget)
         self.SaveFileButton.setObjectName("SaveFileButton")
         self.SaveFileButton.setText("Save File")
 
-        self.SavePlotButton = QPushButton(self.Widget)
+        self.SavePlotButton = QPushButton(self.tag_widget)
         self.SavePlotButton.setObjectName("SavePlotButton")
         self.SavePlotButton.setText("Save Plot")
 
@@ -199,7 +202,7 @@ class NetWorkTraffic(AbcUI):
             int_record_delay = int(config_show["Record Delay"] * record_delay_accuracy)
 
             stop = int(time.time() * record_delay_accuracy)
-            start = stop - (config_show["Max Record"] * int_record_delay * record_delay_accuracy)
+            start = int(stop - (config_show["Max Record"] * int_record_delay * record_delay_accuracy))
 
             for past_timestamp in range(start, stop, int_record_delay):
                 self.show_getter.this_sent_que.append((past_timestamp / record_delay_accuracy, 0))

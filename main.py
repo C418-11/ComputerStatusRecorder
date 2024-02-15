@@ -2,8 +2,9 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.2Bata"
+__version__ = "0.0.3Alpha"
 
+import os
 import sys
 
 import colorama
@@ -12,13 +13,24 @@ from PyQt5.QtWidgets import QApplication
 
 import FeatureLoader
 from Lib import StdColor
+from Lib.Configs import read_default_yaml, BASE_PATH
 from UI import RegisterUI
 from UI.BaseWidgets import GetScale
 from UI.Main import UiMain
 
+_load_other_futures = read_default_yaml(
+    os.path.join(BASE_PATH, 'FuturesLoad.yaml'),
+    {
+        "Load": True,
+    }
+)
+
 
 def main():
     FeatureLoader.load_default_features()
+
+    if _load_other_futures["Load"]:
+        FeatureLoader.load_other_features()
 
     app = QApplication(sys.argv)
     widget = GetScale()
