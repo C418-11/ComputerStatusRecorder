@@ -19,24 +19,31 @@ DefaultFeatures = read_default_yaml(
 )
 
 
+def _load(name: str, import_path: str):
+    try:
+        module = importlib.import_module(f"{import_path}.{name}")
+        print("Feature loaded successfully:", name)
+        return module
+    except ImportError as err:
+        print("Unable to load Feature:", name, " reason:", err)
+        return None
+    except Exception as err:
+        print("Unable to load Feature:", name, " reason:", err)
+        return None
+
+
 def load_default_features():
     lib_path = os.path.join(os.path.dirname(__file__), "DefaultFeatures")
     sys.path.append(lib_path)
 
-    def _load(name):
-        if not bool(DefaultFeatures[name]):
-            return None
-
-        print("loading feature:", name)
-        try:
-            return importlib.import_module("DefaultFeatures." + name)
-        except ImportError as err:
-            print("feature load failed:", name, " reason:", err)
-            return None
-
     loaded_features = {}
     for feature in DefaultFeatures:
-        loaded_features[feature] = _load(feature)
+        if not bool(DefaultFeatures[feature]):
+            print("Feature disabled:", feature)
+            loaded_features[feature] = None
+            continue
+
+        loaded_features[feature] = _load(feature, "DefaultFeatures")
 
     return loaded_features
 
@@ -54,24 +61,18 @@ def load_other_features():
     lib_path = os.path.join(os.path.dirname(__file__), "OtherFeatures")
     sys.path.append(lib_path)
 
-    def _load(name):
-        if name == "YourFeatureName":
-            print("YourFeatureName is a reserved keyword, please change it to another name.")
-            return None
-
-        if not bool(OtherFeatures[name]):
-            return None
-
-        print("loading feature:", name)
-        try:
-            return importlib.import_module("Features." + name)
-        except ImportError as err:
-            print("feature load failed:", name, " reason:", err)
-            return None
-
     loaded_features = {}
     for feature in OtherFeatures:
-        loaded_features[feature] = _load(feature)
+        if feature == "YourFeatureName":
+            print("YourFeatureName is a reserved keyword, please change it to another name.")
+            continue
+
+        if not bool(OtherFeatures[feature]):
+            print("Feature disabled:", feature)
+            loaded_features[feature] = None
+            continue
+
+        loaded_features[feature] = _load(feature, "Features")
 
     return loaded_features
 
