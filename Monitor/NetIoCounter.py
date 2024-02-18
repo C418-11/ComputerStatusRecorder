@@ -3,32 +3,12 @@
 
 import functools
 from enum import StrEnum
+from typing import override
 
 import psutil
 
-
-def _update_check(func):
-    @functools.wraps(func)
-    def wrapper(self, *args, **kwargs):
-        if self.update_when_getter:
-            self.update_data()
-
-        return func(self, *args, **kwargs)
-
-    return wrapper
-
-
-def _dont_update_during_running(func):
-    @functools.wraps(func)
-    def wrapper(self, *args, **kwargs):
-        old = self.update_when_getter
-        self.update_when_getter = False
-        ret = func(self, *args, **kwargs)
-        self.update_when_getter = old
-
-        return ret
-
-    return wrapper
+from Monitor.ABC import ABCMonitor
+from Monitor.tools import update_check
 
 
 class CounterMode(StrEnum):
@@ -36,7 +16,7 @@ class CounterMode(StrEnum):
     EVERY = "every"
 
 
-class NetIoCounter:
+class NetIoCounter(ABCMonitor):
     reader = functools.partial(psutil.net_io_counters, pernic=False)
 
     bytes_recv: int | dict[str, int]
@@ -54,20 +34,19 @@ class NetIoCounter:
     def __init__(self, mode: CounterMode = CounterMode.TOTAL):
         self.mode = CounterMode(mode)
 
-        self.update_when_getter = False
+        self._v_bytes_recv = None
+        self._v_bytes_sent = None
 
-        self._bytes_recv = None
-        self._bytes_sent = None
+        self._v_packets_recv = None
+        self._v_packets_sent = None
 
-        self._packets_recv = None
-        self._packets_sent = None
+        self._v_drop_in = None
+        self._v_drop_out = None
 
-        self._drop_in = None
-        self._drop_out = None
+        self._v_err_in = None
+        self._v_err_out = None
 
-        self._err_in = None
-        self._err_out = None
-
+    @override
     def update_data(self):
         net_io = self.reader()
 
@@ -106,22 +85,22 @@ class NetIoCounter:
         else:
             raise ValueError("Unknown counter mode")
 
-        self._bytes_recv = bytes_recv
-        self._bytes_sent = bytes_sent
+        self._v_bytes_recv = bytes_recv
+        self._v_bytes_sent = bytes_sent
 
-        self._packets_recv = packets_recv
-        self._packets_sent = packets_sent
+        self._v_packets_recv = packets_recv
+        self._v_packets_sent = packets_sent
 
-        self._drop_in = drop_in
-        self._drop_out = drop_out
+        self._v_drop_in = drop_in
+        self._v_drop_out = drop_out
 
-        self._err_in = err_in
-        self._err_out = err_out
+        self._v_err_in = err_in
+        self._v_err_out = err_out
 
-    # 当读取属性时，自动更新数据
-    @_update_check
+    @update_check
+    @override
     def __getattr__(self, item):
-        return getattr(self, "_" + item)
+        return getattr(self, "_v_" + item)
 
 
 __all__ = ("NetIoCounter", "CounterMode")
