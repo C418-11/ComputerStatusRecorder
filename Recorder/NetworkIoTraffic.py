@@ -12,6 +12,7 @@ from Lib.DataSize import convert_to_best_unit
 from Monitor.NetIoCounter import NetIoCounter
 from Recorder.ABC import ABCRecorder
 from Recorder.tools import pack_timestamp_que as _pack
+from Recorder.tools import time_str as _time_str
 
 
 def _mkdir(path: str):
@@ -65,11 +66,11 @@ class NetIoTraffic(ABCRecorder):
 
     @override
     def save(self):
-        time_str = time.strftime("%Y-%m-%d--%H-%M-%S", time.localtime(self.start_time))
-        finish_str = time.strftime("%Y-%m-%d--%H-%M-%S", time.localtime(time.time()))
+        start_str = _time_str("%Y-%m-%d--%H-%M-%S", self.start_time)
+        finish_str = _time_str("%Y-%m-%d--%H-%M-%S", time.time_ns())
 
         def _write(que: deque, type_):
-            life = f"Time[Start[{time_str}],Finish[{finish_str}]]"
+            life = f"Time[Start[{start_str}],Finish[{finish_str}]]"
             type_str = f"Type[{type_}]"
             ext = ".NetworkIoRecord"
 
