@@ -7,6 +7,7 @@ __version__ = "0.0.2Dev"
 import importlib
 import os.path
 import sys
+import re
 
 from Lib.Configs import read_default_yaml, BASE_PATH
 
@@ -25,7 +26,20 @@ def _load(name: str, import_path: str):
         print("Feature loaded successfully:", name)
         return module
     except ImportError as err:
-        print("Unable to load Feature:", name, " reason:", err)
+        c = re.compile(r"No\smodule\snamed\s'([^']+)'")
+        err_module = c.findall(str(err))
+
+        if (not err_module) or len(err_module) != 1:
+            print("Unable to load Feature:", name, " reason:", err)
+            return None
+
+        err_module = err_module[0]
+
+        if err_module == f"{import_path}.{name}":
+            print("Feature not found:", name)
+            return None
+
+        print(f"Unable to load Feature '{name}', dependencies may not be installed: '{err_module}'")
         return None
     except Exception as err:
         print("Unable to load Feature:", name, " reason:", err)
