@@ -36,7 +36,7 @@ class NetIoTraffic(ABCRecorder):
         self.sent_unit = None
         self.recv_unit = None
 
-    def _update_this_bytes(self):
+    def _update_this_bytes(self, get_at: int):
         if self.start_time is None:
             self.start_time = time.time_ns()
 
@@ -49,13 +49,13 @@ class NetIoTraffic(ABCRecorder):
         self.last_sent = b_sent
         self.last_recv = b_recv
 
-        self.this_sent_que.append((time.time_ns(), self.this_sent))
-        self.this_recv_que.append((time.time_ns(), self.this_recv))
+        self.this_sent_que.append((get_at, self.this_sent))
+        self.this_recv_que.append((get_at, self.this_recv))
 
     @override
     def update(self):
         self.bytes_getter.update_data()
-        self._update_this_bytes()
+        self._update_this_bytes(time.time_ns())
 
         self.sent_unit = convert_to_best_unit(Decimal(self.this_sent), DataSize.Byte)
         self.recv_unit = convert_to_best_unit(Decimal(self.this_recv), DataSize.Byte)

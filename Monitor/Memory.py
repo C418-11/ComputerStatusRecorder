@@ -34,6 +34,8 @@ class Memory(ABCMonitor):
     @update_check
     @override
     def __getattr__(self, item):
+        if item.startswith("_v_"):
+            raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{item}'")
         return getattr(self, "_v_" + item)
 
 

@@ -8,13 +8,23 @@ import os
 import struct
 from decimal import Decimal
 import time
+from enum import StrEnum
 
 
-def pack_timestamp_que(que):
+class PackFmt(StrEnum):
+    Int = 'Q'
+    Float = 'd'
+
+
+def pack_timestamp_que(que, fmt=PackFmt.Int):
     """
     :param que: queue[time.time_ns(), value]
+    :param fmt: struct.pack(fmt, value)
     :return:
     """
+
+    if not isinstance(fmt, PackFmt):
+        raise TypeError("fmt must be PackFmt")
 
     ls = []
 
@@ -23,11 +33,8 @@ def pack_timestamp_que(que):
         if type(timestamp) is not int:
             raise TypeError("timestamp must be int")
 
-        if type(value) is not int:
-            raise TypeError("value must be int")
-
         byte = struct.pack('Q', timestamp)
-        byte += struct.pack('Q', value)
+        byte += struct.pack(fmt, value)
         ls.append(byte)
 
     return ls
@@ -42,4 +49,4 @@ def mkdir(path: str, exist_ok=True):
     os.makedirs(path, exist_ok=exist_ok)
 
 
-__all__ = ("pack_timestamp_que", "time_str", "mkdir")
+__all__ = ("PackFmt", "pack_timestamp_que", "time_str", "mkdir")
