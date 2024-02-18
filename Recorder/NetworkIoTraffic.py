@@ -2,7 +2,6 @@
 # cython: language_level = 3
 
 import os.path
-import struct
 import time
 from collections import deque
 from decimal import Decimal
@@ -29,7 +28,7 @@ class NetIoTraffic(ABCRecorder):
         self.this_sent_que = deque(maxlen=self.max_record_len)
         self.this_recv_que = deque(maxlen=self.max_record_len)
 
-        self.start_time = time.time()
+        self.start_time = None
 
         self.last_sent = None
         self.last_recv = None
