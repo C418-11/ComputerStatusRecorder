@@ -6,8 +6,8 @@ __version__ = "0.0.2Dev"
 
 import importlib
 import os.path
-import sys
 import re
+import sys
 
 from Lib.Configs import read_default_yaml, BASE_PATH
 

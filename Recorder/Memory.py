@@ -2,20 +2,19 @@
 # cython: language_level = 3
 
 import os
+import time
+from collections import deque
 from decimal import Decimal
 from enum import StrEnum
 from typing import override
 
 from Lib import DataSize
+from Lib.DataSize import convert_to_best_unit, DataUnit
 from Monitor.Memory import Memory as MMemory
 from Recorder.ABC import ABCRecorder
-from collections import deque
-from Lib.DataSize import convert_to_best_unit, DataUnit
-from Recorder.tools import pack_timestamp_que as _pack, PackFmt
 from Recorder.tools import mkdir as _mkdir
+from Recorder.tools import pack_timestamp_que as _pack, PackFmt
 from Recorder.tools import time_str as _time_str
-
-import time
 
 
 class PathType(StrEnum):

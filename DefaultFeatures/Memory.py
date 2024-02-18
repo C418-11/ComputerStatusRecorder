@@ -18,11 +18,11 @@ from PyQt5.QtWidgets import QLabel, QPushButton
 
 from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
 from Recorder.Memory import Memory as RMemory, PathType
+from Recorder.tools import time_str as _time_str
 from UI.ABC import AbcUI
 from UI.BaseWidgets import MatplotlibWidget
 from UI.RegisterUI import register
 from UI.tools import showException
-from Recorder.tools import time_str as _time_str
 
 
 def _render_plot(ax, color, used):

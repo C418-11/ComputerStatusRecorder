@@ -19,4 +19,4 @@ class ABCRecorder(ABC):
         ...
 
 
-__all__ = ("ABCRecorder", )
+__all__ = ("ABCRecorder",)

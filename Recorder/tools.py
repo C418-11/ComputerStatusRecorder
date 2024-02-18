@@ -6,8 +6,8 @@ __version__ = "0.0.1Dev"
 
 import os
 import struct
-from decimal import Decimal
 import time
+from decimal import Decimal
 from enum import StrEnum
 
 

@@ -5,8 +5,9 @@
 按照本项目根目录下的[`README.md (点击打开)`](../README.md)文件进行基础环境搭建。
 
 为了后续编译你的代码 你需要额外安装以下库：
- * _setuptools 69.0.3_
- * _Cython 3.0.8_
+
+* _setuptools 69.0.3_
+* _Cython 3.0.8_
 
 ## 2.编写代码
 
@@ -17,6 +18,7 @@
 在项目目录[`.configs (点击打开)`](../.configs)下找到[`OtherFeatures.yaml (点击打开)`](../.configs/OtherFeatures.yaml)文件。
 
 你将看到默认的：
+
 ```yaml
 HelloWorld: false
 YourFeatureName: Is Enabled (true | false)
@@ -26,6 +28,7 @@ YourFeatureName: Is Enabled (true | false)
 将`YourFeatureName`替换为你想要的名字，然后将`Is Enabled`的值改为`true`。
 
 例：
+
 ```yaml
 HelloWorld: True
 
@@ -34,6 +37,7 @@ HelloWorld: True
 #### 配置文件行为
 
 如果在配置文件中找到键，且键的值`bool()`为`True`时， 加载器会尝试
+
 ``` python
 import Features.{键名}
 ```
@@ -41,6 +45,7 @@ import Features.{键名}
 ### 2.2 编写代码
 
 #### 2.2.1 编写文件基础描述
+
 在项目目录[`Features (点击打开)`](../Features)下新建一个py文件，命名为你刚刚取的名字。
 
 接着上面的例子，你将新建一个名为[`HelloWorld.py (点击打开)`](../Features/HelloWorld.py)的文件。
@@ -52,6 +57,7 @@ import Features.{键名}
 ```
 
 在后续版本可能会用到的可选变量
+
 ```python
 __author__ = "C418____11 <553515788@qq.com>"  # 此功能作者
 __version__ = "0.0.1Dev"  # 此功能的版本
@@ -141,7 +147,6 @@ class HelloWorld(AbcUI):
         )
 ```
 
-
 为了让`HelloWorld`类能够被加载器加载，需要将其注册：
 
 ``` python
@@ -214,13 +219,12 @@ register(HelloWorld)
 
 参考[`Opacity.py (点击打开)`](../DefaultFeatures/Opacity.py)
 
-
 ## 3. 测试
 
 接着上面的例子
+
 * 确保你编写的功能处于启用状态[`OtherFeatures.yaml (点击打开)`](../.configs/OtherFeatures.yaml)
 * 从程序入口[`main.py (点击打开)`](../main.py)启动程序 ```python ../main.py```
-
 
 ## 4. 编译
 

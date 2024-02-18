@@ -14,6 +14,7 @@ class OrderSet:
     """
     顺序集合
     """
+
     def __init__(self, _data_order: tuple[set, list] = None):
         if _data_order is not None:
             self.data = _data_order[0]

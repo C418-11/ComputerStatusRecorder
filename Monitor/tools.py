@@ -31,4 +31,4 @@ def dont_update_during_running(func):
     return wrapper
 
 
-__all__ = ("update_check", "dont_update_during_running", )
+__all__ = ("update_check", "dont_update_during_running",)
