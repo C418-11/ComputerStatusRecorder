@@ -36,6 +36,10 @@ def _load(name: str, import_path: str):
 
         err_module = err_module[0]
 
+        if err_module == import_path:
+            print("Feature not found:", f"{import_path}.{name}")
+            return None
+
         if err_module == f"{import_path}.{name}":
             print("Feature not found:", name)
             return None
