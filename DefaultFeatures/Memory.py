@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Dev"
+__version__ = "0.0.1Beta"
 
 import os
 import threading
@@ -25,14 +25,14 @@ from UI.tools import showException
 from Recorder.tools import time_str as _time_str
 
 
-def _render_plot(ax, used):
+def _render_plot(ax, color, used):
     # cover 将 [(x1, y1), (x2, y2), ...] 转换为 ([x1, x2, ...,], [y1, y2, ...])
     def _cover(ls):
         x = [t for t, _ in ls]
         y = [v for _, v in ls]
         return x, y
 
-    ax.plot(*_cover(used), color='black', label='Used')
+    ax.plot(*_cover(used), color=color, label='Used')
 
     ax.set_xlabel('Timestamp')
     ax.set_ylabel('Bytes')
@@ -46,6 +46,7 @@ class Memory(AbcUI):
             "Max Record": 50,
             "Record Delay": 0.5,
             "Fill Default": True,
+            "LineColor": "blue",
             "Path": r"./.record/Memory/",
         },
         "[Record]": {
@@ -215,7 +216,7 @@ class Memory(AbcUI):
 
             with self.PlotRenderLock:
                 ax.clear()
-                _render_plot(ax, self.show_getter.used_que)
+                _render_plot(ax, self._configs["[Show]"].get_default("LineColor", "blue"), self.show_getter.used_que)
 
             self.plot_widget.canvas.draw()
 

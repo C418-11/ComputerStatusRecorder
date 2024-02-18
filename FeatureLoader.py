@@ -14,8 +14,9 @@ from Lib.Configs import read_default_yaml, BASE_PATH
 DefaultFeatures = read_default_yaml(
     os.path.join(BASE_PATH, "DefaultFeatures.yaml"),
     {
-        "NetWorkTraffic": True,
-        "Opacity": True,
+        "1|NetWorkTraffic": True,  # 这里的 '|' 是为了保证写入顺序 (实测发现yaml写入顺序与dict不一致, 疑似做了排序)
+        "2|Memory": True,  # 这里保证写入顺序的主要原因是加载顺序敏感, 会导致界面的显示顺序不一致
+        "3|Opacity": True,
     }
 )
 
@@ -56,7 +57,8 @@ def load_default_features():
             print("Feature disabled:", feature)
             loaded_features[feature] = None
             continue
-
+        if '|' in feature:
+            feature = feature.split('|')[1]
         loaded_features[feature] = _load(feature, "DefaultFeatures")
 
     return loaded_features
