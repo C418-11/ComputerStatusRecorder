@@ -72,17 +72,17 @@ class NetWorkTraffic(AbcUI):
 
         self.show_getter = NetIoTraffic(
             max_record_len=self._configs["[Show]"]["Max Record"],
-            file_path=self._configs["[Show]"]["Path"]
+            save_path=self._configs["[Show]"]["Path"]
         )
 
         self.record_getter = NetIoTraffic(
             max_record_len=self._configs["[Record]"]["Max Record"],
-            file_path=self._configs["[Record]"]["Path"]
+            save_path=self._configs["[Record]"]["Path"]
         )
 
         self.running = False
-        self._show_thread = Thread(target=self._show_loop, daemon=True, name="NetWorkTraffic--ShowThread")
-        self._record_thread = Thread(target=self._record_loop, daemon=True, name="NetWorkTraffic--RecordThread")
+        self._show_thread = Thread(target=self._show_loop, daemon=True, name=f"{type(self).__name__}--ShowThread")
+        self._record_thread = Thread(target=self._record_loop, daemon=True, name=f"{type(self).__name__}--RecordThread")
 
         self.base_wh: tuple[int, int] | None = None
 
@@ -103,11 +103,11 @@ class NetWorkTraffic(AbcUI):
         msg_box.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         response = msg_box.exec()
         if response == QMessageBox.Ok:
-            QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.join(self.record_getter.file_path, ".NetworkIoRecord")))
+            QDesktopServices.openUrl(QUrl.fromLocalFile(os.path.join(self.record_getter.save_path, ".NetworkIoRecord")))
 
     @showException
     def _save_show_plot(self, *_):
-        dir_path = os.path.join(self.show_getter.file_path, ".PlotImage")
+        dir_path = os.path.join(self.show_getter.save_path, ".PlotImage")
 
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
@@ -196,17 +196,14 @@ class NetWorkTraffic(AbcUI):
 
         if self._configs["[Show]"].get_default("Fill Default", True):
             config_show = self._configs["[Show]"]
+            record_delay = int(config_show["Record Delay"] * 1000000000)
 
-            record_delay_accuracy = 10 ** len(str(config_show["Record Delay"]).split('.')[1])
+            stop = time.time_ns()
+            start = int(stop - (config_show["Max Record"] * record_delay))
 
-            int_record_delay = int(config_show["Record Delay"] * record_delay_accuracy)
-
-            stop = int(time.time() * record_delay_accuracy)
-            start = int(stop - (config_show["Max Record"] * int_record_delay * record_delay_accuracy))
-
-            for past_timestamp in range(start, stop, int_record_delay):
-                self.show_getter.this_sent_que.append((past_timestamp / record_delay_accuracy, 0))
-                self.show_getter.this_recv_que.append((past_timestamp / record_delay_accuracy, 0))
+            for past_timestamp in range(start, stop, record_delay):
+                self.show_getter.this_sent_que.append((past_timestamp, 0))
+                self.show_getter.this_recv_que.append((past_timestamp, 0))
 
         def _once():
             self.show_getter.update()
