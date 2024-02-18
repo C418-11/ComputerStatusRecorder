@@ -4,8 +4,9 @@
 __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
 
+import os
 import struct
-
+from decimal import Decimal
 import time
 
 
@@ -32,8 +33,13 @@ def pack_timestamp_que(que):
     return ls
 
 
-def time_str(fmt, timestamp: int | float):
-    return time.strftime(fmt, time.localtime(timestamp))
+def time_str(fmt, timestamp: int):
+    timestamp = Decimal(timestamp) / Decimal(1000000000)
+    return time.strftime(fmt, time.localtime(float(timestamp)))
 
 
-__all__ = ("pack_timestamp_que", "time_str")
+def mkdir(path: str, exist_ok=True):
+    os.makedirs(path, exist_ok=exist_ok)
+
+
+__all__ = ("pack_timestamp_que", "time_str", "mkdir")

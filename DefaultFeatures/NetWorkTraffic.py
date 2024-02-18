@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Release"
+__version__ = "0.0.1Release-Fix"
 
 import os
 import threading
@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import QLabel, QPushButton
 
 from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
 from Recorder.NetworkIoTraffic import NetIoTraffic
+from Recorder.tools import time_str as _time_str
 from UI.ABC import AbcUI
 from UI.BaseWidgets import MatplotlibWidget
 from UI.RegisterUI import register
@@ -112,8 +113,8 @@ class NetWorkTraffic(AbcUI):
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
 
-        time_str = time.strftime("%Y-%m-%d--%H-%M-%S", time.localtime(self.show_getter.start_time))
-        finish_str = time.strftime("%Y-%m-%d--%H-%M-%S", time.localtime(time.time()))
+        time_str = _time_str("%Y-%m-%d--%H-%M-%S", self.show_getter.start_time)
+        finish_str = _time_str("%Y-%m-%d--%H-%M-%S", time.time_ns())
         life = f"Time[Start[{time_str}],Finish[{finish_str}]]"
 
         file_path = os.path.join(dir_path, f"{life}.png")

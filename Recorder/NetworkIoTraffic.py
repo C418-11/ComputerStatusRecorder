@@ -13,11 +13,7 @@ from Monitor.NetIoCounter import NetIoCounter
 from Recorder.ABC import ABCRecorder
 from Recorder.tools import pack_timestamp_que as _pack
 from Recorder.tools import time_str as _time_str
-
-
-def _mkdir(path: str):
-    # 尝试一次性创建多级目录
-    os.makedirs(path, exist_ok=True)
+from Recorder.tools import mkdir as _mkdir
 
 
 class NetIoTraffic(ABCRecorder):
@@ -29,7 +25,7 @@ class NetIoTraffic(ABCRecorder):
         self.this_sent_que = deque(maxlen=self.max_record_len)
         self.this_recv_que = deque(maxlen=self.max_record_len)
 
-        self.start_time = None
+        self.start_time: int | None = None
 
         self.last_sent = None
         self.last_recv = None
