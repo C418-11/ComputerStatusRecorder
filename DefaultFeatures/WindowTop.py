@@ -41,5 +41,10 @@ class WindowTop(AbcMenu):
         self.menu.addAction("On", lambda *_: self.on())
         self.menu.addAction("Off", lambda *_: self.off())
 
+    @staticmethod
+    @override
+    def priority():
+        return float("-inf")
+
 
 register_menu(WindowTop)

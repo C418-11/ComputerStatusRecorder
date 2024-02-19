@@ -50,6 +50,11 @@ class HelloWorld(AbcUI):
             y,
         )
 
+    # 返回的值越小 页面越靠前
+    @staticmethod
+    def priority():
+        return float("-inf")
+
 
 # 将这个类注册到界面加载器中
 register(HelloWorld)

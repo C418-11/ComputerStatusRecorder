@@ -26,6 +26,10 @@ class AbcUI(ABC):
     def getTagName(self):
         ...
 
+    @staticmethod
+    def priority():
+        return 0
+
 
 class AbcMenu(ABC):
     def __init__(self, _menubar: QMenuBar, _window: QWidget):
@@ -39,3 +43,7 @@ class AbcMenu(ABC):
     @abstractmethod
     def getMenuWidget(self):
         ...
+
+    @staticmethod
+    def priority():
+        return 0

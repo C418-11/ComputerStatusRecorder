@@ -37,6 +37,9 @@ def main():
     ui = UiMain(widget)
     ui.setupUi()
 
+    RegisterUI.menu.sort(key=lambda x: x.priority())
+    RegisterUI.widgets.sort(key=lambda x: x.priority())
+
     for Menu in RegisterUI.menu:
         menu = Menu(ui.MenuBar, widget)
         menu.setupUi()

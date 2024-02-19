@@ -253,5 +253,10 @@ class Memory(AbcUI):
     def getTagName(self):
         return self.tag_widget.objectName()
 
+    @staticmethod
+    @override
+    def priority():
+        return -1
+
 
 register(Memory)

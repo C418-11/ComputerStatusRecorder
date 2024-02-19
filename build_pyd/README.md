@@ -98,6 +98,10 @@ class HelloWorld(AbcUI):
     def ReScale(self, x_scale: float, y_scale: float):
         ...
         
+    # 返回的值越小 页面越靠前
+    def priority():
+        ...
+        
 ```
 
 具体要实现的方法请参考[`UI.ABC.py (点击打开)`](../UI/ABC.py)
@@ -145,6 +149,11 @@ class HelloWorld(AbcUI):
             x,
             y,
         )
+    
+    # 返回的值越小 页面越靠前
+    @staticmethod
+    def priority():
+        return float("-inf")
 ```
 
 为了让`HelloWorld`类能够被加载器加载，需要将其注册：
@@ -209,6 +218,11 @@ class HelloWorld(AbcUI):
             y,
         )
 
+    # 返回的值越小 页面越靠前
+    @staticmethod
+    def priority():
+        return float("-inf")
+
 
 # 将这个类注册到界面加载器中
 register(HelloWorld)
@@ -216,7 +230,8 @@ register(HelloWorld)
 
 #### 2.2.3 编写Menu
 
-参考[`Opacity.py (点击打开)`](../DefaultFeatures/Opacity.py)
+* 参考[`Opacity.py (点击打开)`](../DefaultFeatures/Opacity.py)
+* 参考[`WindowTop.py (点击打开)`](../DefaultFeatures/WindowTop.py)
 
 ## 3. 测试
 

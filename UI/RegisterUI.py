@@ -43,12 +43,15 @@ class OrderSet:
         self.data.update(item.data)
 
     def copy(self):
-        return OrderSet((self.data.copy(), self.order.copy()))
+        return type(self)((self.data.copy(), self.order.copy()))
 
     def pop(self):
         ret = self.order.pop()
         self.data.remove(ret)
         return ret
+
+    def sort(self, key=None, reverse=False):
+        self.order.sort(key=key, reverse=reverse)
 
     def __repr__(self):
         return f"OrderSet({self.order})"

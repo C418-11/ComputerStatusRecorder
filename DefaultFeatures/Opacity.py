@@ -6,6 +6,7 @@ __version__ = "0.0.1Dev"
 
 import time
 import uuid
+from typing import override
 
 from PyQt5.QtWidgets import QApplication, QMenu
 
@@ -41,9 +42,11 @@ class OpacityMenu(AbcMenu):
         if self.animationRunning == this_animation:
             self.animationRunning = None
 
+    @override
     def getMenuWidget(self):
         return self.menu
 
+    @override
     def setupUi(self):
         self.menu = QMenu(self.menubar)
         self.menu.setTitle("Opacity")
@@ -56,6 +59,11 @@ class OpacityMenu(AbcMenu):
 
         for alpha in range(70, 29, -10):
             self.menu.addAction(str(alpha) + "%", _animation(alpha / 100))
+
+    @staticmethod
+    @override
+    def priority():
+        return -1
 
 
 register_menu(OpacityMenu)
