@@ -200,7 +200,6 @@ class HelloWorld(AbcUI):
 
     # 当父控件大小改变时, 会调用这个方法, 用于调整子控件大小
     def ReScale(self, x_scale: float, y_scale: float):
-
         x = (self._parent.width() - self.Label.width()) // 2
         y = (self._parent.height() - self.Label.height()) // 2
 
