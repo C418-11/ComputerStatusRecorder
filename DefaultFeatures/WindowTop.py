@@ -7,7 +7,7 @@ __version__ = "0.0.1Dev"
 from typing import override
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMenu, QWidget, QAction, QMenuBar
+from PyQt5.QtWidgets import QMenu, QWidget, QMenuBar
 
 from UI.ABC import AbcMenu
 from UI.RegisterUI import register_menu
