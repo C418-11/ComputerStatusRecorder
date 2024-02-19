@@ -15,9 +15,8 @@ from UI.tools import showException
 
 
 class OpacityMenu(AbcMenu):
-    def __init__(self, _parent):
-        super().__init__(_parent)
-        self.widget = _parent
+    def __init__(self, _menubar, _window):
+        super().__init__(_menubar, _window)
         self.menu: QMenu | None = None
         self.animationRunning = None
 
@@ -26,7 +25,7 @@ class OpacityMenu(AbcMenu):
         this_animation = uuid.uuid4()
         self.animationRunning = this_animation
 
-        _from = self.widget.windowOpacity()
+        _from = self.window.windowOpacity()
         # 从_from渐变到to
         sub = (to - _from) / 100
 
@@ -34,10 +33,10 @@ class OpacityMenu(AbcMenu):
             if self.animationRunning != this_animation:
                 return
 
-            self.widget.setWindowOpacity(_from + i * sub)
+            self.window.setWindowOpacity(_from + i * sub)
             QApplication.processEvents()
             time.sleep(0.01)
-        self.widget.setWindowOpacity(to)
+        self.window.setWindowOpacity(to)
 
         if self.animationRunning == this_animation:
             self.animationRunning = None
@@ -46,7 +45,7 @@ class OpacityMenu(AbcMenu):
         return self.menu
 
     def setupUi(self):
-        self.menu = QMenu(self.widget)
+        self.menu = QMenu(self.menubar)
         self.menu.setTitle("Opacity")
 
         def _animation(opacity):

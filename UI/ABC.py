@@ -28,7 +28,9 @@ class AbcUI(ABC):
 
 
 class AbcMenu(ABC):
-    def __init__(self, _parent: QMenuBar): ...
+    def __init__(self, _menubar: QMenuBar, _window: QWidget):
+        self.menubar = _menubar
+        self.window = _window
 
     @abstractmethod
     def setupUi(self):

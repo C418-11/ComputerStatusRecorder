@@ -36,7 +36,10 @@ class Config:
         self._path_from_root = path_from_root
         self._file_path = file_path
 
-        for key in config:
+        if self._config is None:
+            self._config = {}
+
+        for key in self._config:
             if hasattr(self, key):
                 raise KeyError(f"'{key}' is a reserved keyword")
 

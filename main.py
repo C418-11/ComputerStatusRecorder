@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.4Release"
+__version__ = "0.0.5Dev"
 
 import os
 import sys
@@ -29,7 +29,7 @@ _load_other_futures = read_default_yaml(
 def main():
     FeatureLoader.load_default_features()
 
-    if _load_other_futures["Load"]:
+    if _load_other_futures.get_default("Load", False) is True:
         FeatureLoader.load_other_features()
 
     app = QApplication(sys.argv)
@@ -38,7 +38,7 @@ def main():
     ui.setupUi()
 
     for Menu in RegisterUI.menu:
-        menu = Menu(widget)
+        menu = Menu(ui.MenuBar, widget)
         menu.setupUi()
         ui.MenuBar.addMenu(menu.getMenuWidget())
 

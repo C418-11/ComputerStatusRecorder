@@ -16,7 +16,8 @@ DefaultFeatures = read_default_yaml(
     {
         "1|NetWorkTraffic": True,  # 这里的 '|' 是为了保证写入顺序 (实测发现yaml写入顺序与dict不一致, 疑似做了排序)
         "2|Memory": True,  # 这里保证写入顺序的主要原因是加载顺序敏感, 会导致界面的显示顺序不一致
-        "3|Opacity": True,
+        "3|WindowTop": True,
+        "4|Opacity": True,
     }
 )
 
