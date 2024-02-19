@@ -5,6 +5,7 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.2Dev"
 
 import traceback
+import warnings
 from typing import override
 
 from PyQt5.QtCore import *
@@ -91,8 +92,17 @@ class UiMain:
     def _MaxNormalSlot(self, *_, **__):
         if self.Widget.isMaximized():
             self.Widget.showNormal()
+            try:
+                self.Widget.setGeometry(self.Widget.NormalGeometry)
+            except AttributeError:
+                warnings.warn(
+                    f"Widget {self.Widget} has no NormalGeometry",
+                    RuntimeWarning,
+                    stacklevel=0
+                )
             self.MaxNormalButton.setText(u"Max")
         else:
+            self.Widget.NormalGeometry = self.Widget.geometry()
             self.Widget.showMaximized()
             self.MaxNormalButton.setText(u"Normal")
 
