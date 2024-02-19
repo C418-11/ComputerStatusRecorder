@@ -7,7 +7,6 @@ __version__ = "0.0.1Dev"
 import os
 import struct
 import time
-from decimal import Decimal
 from enum import StrEnum
 
 
@@ -41,8 +40,7 @@ def pack_timestamp_que(que, fmt=PackFmt.Int):
 
 
 def time_str(fmt, timestamp: int):
-    timestamp = Decimal(timestamp) / Decimal(1000000000)
-    return time.strftime(fmt, time.localtime(float(timestamp)))
+    return time.strftime(fmt, time.localtime(timestamp / 1000000000))
 
 
 def mkdir(path: str, exist_ok=True):

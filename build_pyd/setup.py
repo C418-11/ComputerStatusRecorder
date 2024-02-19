@@ -118,7 +118,8 @@ def _main():
         case 2:
             b()
         case 3:
-            print(_get_dependency_versions())
+            for dep, ver in _get_dependency_versions().items():
+                print(f"{dep}=={ver}")
         case 4:
             exit()
         case _:
