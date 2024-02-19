@@ -8,6 +8,14 @@
 
 * _setuptools 69.0.3_
 * _Cython 3.0.8_
+* _pyinstaller 6.4.0_
+
+完整的依赖在当前目录下的[`requirements.txt (点击打开)`](./requirements.txt)文件中。
+
+你可以在 [`**当前目录**`](.) 下使用以下命令安装：
+```commandline
+pip install -r requirements.txt
+```
 
 ## 2.编写代码
 
@@ -242,6 +250,8 @@ register(HelloWorld)
 
 ## 4. 编译
 
+### 4.1编译功能
+
 确保你所有额外的依赖项都在[`Features (点击打开)`](../Features)目录下并且能被正确导入
 
 打开[`setup.py(点击打开)`](setup.py)并执行```python setup.py```
@@ -270,3 +280,19 @@ register(HelloWorld)
         ├── HelloWord.pyd
         └── 你新创建的文件树
 ```
+
+### 4.2 编译主程序
+
+在本项目根目录下用命令行执行以下命令
+
+```commandline
+pyinstaller main.py -D --clean --hide-console hide-early -i "path/to/your/image/file.png" -n StatusRecorder
+```
+
+执行完后, 使用4.1的方法将默认功能和你的新功能编译放进[`../dist/StatusRecorder/_internal (点击打开)`](../dist/StatusRecorder/_internal)
+
+## 5. 打包后调试
+
+* 如果你在4.2打包主程序时没使用参数`--hide-console hide-early`请删除旧的打包文件重新进行打包
+
+在命令行运行打包后的程序 这时程序的标准输入输出会作用在控制台上

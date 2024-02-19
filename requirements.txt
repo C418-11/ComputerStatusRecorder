@@ -2,4 +2,4 @@ PyQt5==5.15.10
 psutil==5.9.8
 colorama==0.4.6
 matplotlib==3.8.2
-PYYAML==6.0.1
+PyYAML==6.0.1
