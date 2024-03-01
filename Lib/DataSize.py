@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Dev"
+__version__ = "0.0.2Dev"
 
 from abc import ABC
 from decimal import Decimal
@@ -19,6 +19,12 @@ class DataUnit(ABC):
     __base_conversion__: Decimal
 
     __larger_unit__: type[Self]
+
+    def __repr__(self):
+        return f"<{self.fullname} ({self.abbreviation})>"
+
+    def __str__(self):
+        return repr(self)
 
 
 class Bit(DataUnit):
@@ -124,73 +130,137 @@ class YottaByte(DataUnit):
 
 ZettaByte.__larger_unit__ = YottaByte
 
+unit_list: list[type[DataUnit]] = []
 
-def _convert_to_base_unit(value: Decimal, data_unit: type[DataUnit]) -> tuple[Decimal, type[DataUnit]]:
+_ = YottaByte
+while _:
+    unit_list.append(_)
+    try:
+        _ = _.__base_unit__
+    except AttributeError:
+        break
+
+
+def convert_to_base_unit(value: Decimal, data_unit: type[DataUnit]) -> tuple[Decimal, type[DataUnit]]:
+    """
+    转换为小一级单位
+    """
+
     return value * data_unit.__base_conversion__, data_unit.__base_unit__
 
 
-def _convert_to_larger_unit(value: Decimal, data_unit: type[DataUnit]) -> tuple[Decimal, type[DataUnit]]:
+def convert_to_larger_unit(value: Decimal, data_unit: type[DataUnit]) -> tuple[Decimal, type[DataUnit]]:
+    """
+    转换为大一级单位
+    """
+
     return value / data_unit.__larger_unit__.__base_conversion__, data_unit.__larger_unit__
 
 
-def _convert_to_base(
+def convert_to_base(
         value: Decimal,
         data_unit: type[DataUnit],
         target_unit: type[DataUnit],
 ) -> tuple[Decimal, type[DataUnit]]:
-    if not hasattr(data_unit, "__base_unit__"):
-        return value, data_unit
+    """
+    一直往小了尝试直到转换为目标单位
+    """
+
     if data_unit is target_unit:
         return value, data_unit
 
+    if not hasattr(data_unit, "__base_unit__"):
+        raise ValueError("Cannot convert to smaller unit")
+
     else:
-        return _convert_to_base(*_convert_to_base_unit(value, data_unit))
+        v, u = convert_to_base_unit(value, data_unit)
+        return convert_to_base(v, u, target_unit)
 
 
-def _convert_to_larger(
+def convert_to_larger(
         value: Decimal,
         data_unit: type[DataUnit],
         target_unit: type[DataUnit]
 ) -> tuple[Decimal, type[DataUnit]]:
-    if not hasattr(data_unit, "__larger_unit__"):
+    """
+    一直往大了尝试直到转换为目标单位
+    """
+
+    if data_unit is target_unit:
         return value, data_unit
 
-    if data_unit.__larger_unit__ is target_unit:
-        return value, data_unit
+    if not hasattr(data_unit, "__larger_unit__"):
+        raise ValueError("Cannot convert to larger unit")
 
     else:
-        return _convert_to_larger(*_convert_to_larger_unit(value, data_unit))
+        v, u = convert_to_larger_unit(value, data_unit)
+        return convert_to_larger(v, u, target_unit)
 
 
-def convert_to_best_unit(value: Decimal, unit: type[DataUnit]) -> tuple[Decimal, DataUnit]:
-    class LastType(StrEnum):
-        Larger = "larger"
-        Lower = "lower"
+class CompareUnit(StrEnum):
+    Larger = "larger"
+    Lower = "lower"
+
+
+def convert_to_best_unit(
+        value: Decimal,
+        unit: type[DataUnit],
+        cmp=lambda v: CompareUnit.Larger if v > 1 else CompareUnit.Lower
+) -> tuple[Decimal, type[DataUnit]]:
+    """
+    转换到最合适的单位
+    """
 
     def _find(v, u, last_type, last_value=None, last_unit=None):
         if v == 1:
             return v, u
 
-        now_type = LastType.Lower if v < 1 else LastType.Larger
+        now_type = cmp(v)
 
         if last_type is not None and now_type != last_type:
             return last_value, last_unit
 
-        if now_type == LastType.Lower:
+        if now_type == CompareUnit.Lower:
             try:
-                return _find(*_convert_to_base_unit(v, u), now_type, v, u)
+                return _find(*convert_to_base_unit(v, u), now_type, v, u)
             except AttributeError:
                 return v, u
 
-        elif now_type == LastType.Larger:
+        elif now_type == CompareUnit.Larger:
             try:
-                return _find(*_convert_to_larger_unit(v, u), now_type, v, u)
+                return _find(*convert_to_larger_unit(v, u), now_type, v, u)
             except AttributeError:
                 return v, u
         else:
             raise ValueError(f"Unknown type {now_type}")
 
     return _find(value, unit, None)
+
+
+def convert_to_unit(
+        value: Decimal,
+        unit: type[DataUnit],
+        target_unit: type[DataUnit]
+) -> tuple[Decimal, type[DataUnit]]:
+    """
+    转换到目标单位
+    """
+
+    if unit == target_unit:
+        return value, unit
+
+    now = unit_list.index(unit)
+    target = unit_list.index(target_unit)
+
+    cmp = CompareUnit.Larger if now > target else CompareUnit.Lower
+
+    result = None
+    if cmp == CompareUnit.Larger:
+        result = convert_to_larger(value, unit, target_unit)
+    elif cmp == CompareUnit.Lower:
+        result = convert_to_base(value, unit, target_unit)
+
+    return result
 
 
 if __name__ == "__main__":
@@ -210,5 +280,14 @@ __all__ = (
     "ZettaByte",
     "YottaByte",
 
-    "convert_to_best_unit"
+    "unit_list",
+
+    "convert_to_base_unit",
+    "convert_to_larger_unit",
+
+    "convert_to_base",
+    "convert_to_larger",
+
+    "convert_to_best_unit",
+    "convert_to_unit",
 )
