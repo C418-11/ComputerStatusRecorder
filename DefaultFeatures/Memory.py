@@ -147,11 +147,11 @@ class Memory(AbcUI):
         self.TextLabel.move(0, 0)
         self.TextLabel.setAlignment(Qt.AlignCenter)
 
-        # 保存按钮固定在左下角
         self.SaveFileButton.resize(int(100 * x_scale), int(30 * y_scale))
+        self.SavePlotButton.resize(int(100 * x_scale), int(30 * y_scale))
+
         self.SaveFileButton.move(0, self.plot_widget.height() - self.SavePlotButton.height())
 
-        self.SavePlotButton.resize(int(100 * x_scale), int(30 * y_scale))
         self.SavePlotButton.move(
             self.SaveFileButton.width(),
             self.SaveFileButton.y()
