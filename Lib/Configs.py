@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.2Dev"
+__version__ = "0.0.2Bata"
 
 import os
 from collections import OrderedDict
@@ -110,7 +110,8 @@ _screen = read_default_yaml(os.path.join(BASE_PATH, 'Screen.yaml'), {
             "Small": 10,
             "Normal": 12,
             "Large": 14,
-            "Huge": 16
+            "Huge": 16,
+            "Title": 20,
         }
     }
 })
