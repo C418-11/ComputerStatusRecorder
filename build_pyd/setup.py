@@ -82,7 +82,12 @@ class PyToPyd:
         root_dir = os.path.dirname(dir_path)
 
         for path in _get_all_extension_files(dir_path):
-            to_path = sub_path + str(os.path.relpath(os.path.dirname(path), root_dir))
+
+            if os.path.relpath(path, root_dir).lower().startswith("lib"):
+                to_path = sub_path
+            else:
+                to_path = sub_path + str(os.path.relpath(os.path.dirname(path), root_dir))
+
             self.make(path, sub_path=to_path)
 
 
@@ -105,9 +110,9 @@ def _main():
     compiler = PyToPyd()
 
     def a():
-        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\DefaultFeatures", "DefaultFeatures")
-        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Recorder", "Recorder")
-        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Monitor", "Monitor")
+        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\DefaultFeatures")
+        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Recorder")
+        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Monitor")
         compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Lib")
         _rename_all(compiler.pyd_path, r".cp312-win_amd64", r"")
 
