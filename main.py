@@ -2,10 +2,11 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.5Dev"
+__version__ = "0.0.6Dev"
 
 import os
 import sys
+import traceback
 
 import colorama
 from PyQt5.QtCore import Qt
@@ -30,7 +31,11 @@ def main():
     FeatureLoader.load_default_features()
 
     if _load_other_futures.get_default("Load", False) is True:
-        FeatureLoader.load_other_features()
+        try:
+            FeatureLoader.load_other_features()
+        except Exception as e:
+            print("An error occurred while loading another futures:", file=sys.stderr)
+            traceback.print_exception(e)
 
     app = QApplication(sys.argv)
     widget = GetScale()
