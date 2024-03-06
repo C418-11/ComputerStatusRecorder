@@ -75,7 +75,7 @@ class Memory(ABCRecorder):
         start_str = _time_str("%Y-%m-%d--%H-%M-%S", self.start_time)
         finish_str = _time_str("%Y-%m-%d--%H-%M-%S", time.time_ns())
 
-        def _write(que: deque, type_, fmt: PackFmt = PackFmt.Int):
+        def _write(que: deque, type_, fmt: PackFmt = PackFmt.UnsignedLongLong):
             life = f"Time[Start[{start_str}],Finish[{finish_str}]]"
             type_str = f"Type[{type_}]"
             ext = ".MemoryRecord"
@@ -84,7 +84,7 @@ class Memory(ABCRecorder):
             _mkdir(data_path)
 
             with open(os.path.join(data_path, f"{life},{type_str}{ext}"), 'ab') as file:
-                for b in _pack(que, fmt=fmt):
+                for b in _pack(que, fmt):
                     file.write(b)
 
             return os.path.abspath(os.path.join(data_path, f"{life},{type_str}{ext}"))
@@ -97,7 +97,7 @@ class Memory(ABCRecorder):
         }
 
         ret_dict = {type_: _write(que, type_) for type_, que in type_ls.items()}
-        ret_dict[PathType.PERCENT] = _write(self.percent_que, PathType.PERCENT, PackFmt.Float)
+        ret_dict[PathType.PERCENT] = _write(self.percent_que, PathType.PERCENT, PackFmt.Double)
 
         return ret_dict
 
