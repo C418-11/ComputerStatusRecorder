@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.1Release-Fix"
+__version__ = "0.0.2Dev"
 
 import os
 import threading
@@ -12,11 +12,12 @@ from threading import Thread
 from typing import override
 
 from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtGui import QDesktopServices, QFont
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QLabel, QPushButton
 
 from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
+from Lib.Configs import FontFamily, SmallFont, TitleFont
 from Recorder.NetworkIoTraffic import NetIoTraffic
 from Recorder.tools import time_str as _time_str
 from UI.ABC import AbcUI
@@ -38,7 +39,7 @@ def _render_plot(ax, sent, recv):
     ax.set_xlabel('Timestamp')
     ax.set_ylabel('Bytes')
 
-    ax.legend(loc='upper left', fontsize=10)
+    ax.legend(loc='upper left', fontsize=SmallFont)
 
 
 class NetWorkTraffic(AbcUI):
@@ -171,8 +172,8 @@ class NetWorkTraffic(AbcUI):
 
         self.TrafficLabel = QLabel(self.tag_widget)
         self.TrafficLabel.setObjectName("NetWorkLabel")
+        self.TrafficLabel.setFont(QFont(FontFamily, TitleFont))
         self.TrafficLabel.setAlignment(Qt.AlignCenter)
-        self.TrafficLabel.setStyleSheet("font-size: 20px;font-weight: bold;")
 
         self.SaveFileButton = QPushButton(self.tag_widget)
         self.SaveFileButton.setObjectName("SaveFileButton")
@@ -227,6 +228,8 @@ class NetWorkTraffic(AbcUI):
                 _once()
             except RuntimeError as err:
                 if "C/C++" in str(err) and "delete" in str(err):
+                    if not self.running:
+                        return
                     try:
                         warnings.warn(
                             "The program appears to be closed, stopping the drawing loop...",
@@ -257,6 +260,10 @@ class NetWorkTraffic(AbcUI):
     @override
     def priority():
         return -2
+
+    @override
+    def exit(self):
+        self.running = False
 
 
 register(NetWorkTraffic)
