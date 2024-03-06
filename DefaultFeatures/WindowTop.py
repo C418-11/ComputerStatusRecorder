@@ -3,6 +3,7 @@
 
 __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
+__description__ = "Window topping"
 
 from typing import override
 
