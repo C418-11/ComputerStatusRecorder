@@ -89,6 +89,16 @@ _screen = read_default_yaml(os.path.join(BASE_PATH, 'Screen.yaml'), {
     "MinimumSize": {
         "width": 680,
         "height": 520
+    },
+    "Default Font": {
+        "family": "Arial",
+        "Font Size": {
+            "Tiny": 8,
+            "Small": 10,
+            "Normal": 12,
+            "Large": 14,
+            "Huge": 16
+        }
     }
 })
 
@@ -96,3 +106,15 @@ try:
     MinimumSize = tuple(int(_screen["MinimumSize"][key]) for key in ("width", "height"))
 except KeyError:
     MinimumSize = (680, 520)
+
+_font = _screen.get_default("Default Font", Config({}))
+_font_size = _font.get_default("Font Size", Config({}))
+
+FontFamily = _font.get_default("family", "Arial")
+
+TinyFont = _font_size.get_default("Tiny", 8)
+SmallFont = _font_size.get_default("Small", 10)
+NormalFont = _font_size.get_default("Normal", 12)
+LargeFont = _font_size.get_default("Large", 14)
+HugeFont = _font_size.get_default("Huge", 16)
+TitleFont = _font_size.get_default("Title", 20)
