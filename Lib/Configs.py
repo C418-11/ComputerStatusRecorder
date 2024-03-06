@@ -5,6 +5,7 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.2Dev"
 
 import os
+from collections import OrderedDict
 
 import yaml
 
@@ -29,15 +30,20 @@ class Config:
             path_from_root: list | None = None,
             file_path: str | None = None
     ):
+
+        self.isNone = False
+        if config is None:
+            self.isNone = True
+            config = {}
+        if type(config) is dict:
+            config = OrderedDict(config)
+
         if path_from_root is None:
             path_from_root = []
 
         self._config = config
         self._path_from_root = path_from_root
         self._file_path = file_path
-
-        if self._config is None:
-            self._config = {}
 
         for key in self._config:
             if hasattr(self, key):
@@ -60,6 +66,13 @@ class Config:
             f"Cannot find key {path_str} in configuration file {self._file_path}",
         )
 
+    def sort(self, key=None, reverse: bool = False):
+        if type(self._config) is OrderedDict:
+            self._config = OrderedDict(sorted(self._config.items(), key=key, reverse=reverse))
+            return
+
+        self._config = sorted(self._config, key=key, reverse=reverse)
+
     def keys(self):
         return self._config.keys()
 
@@ -79,7 +92,7 @@ class Config:
             self._key_not_found_message_box(item)
             raise
         else:
-            if type(ret) is dict or type(ret) is list or type(ret) is tuple:
+            if type(ret) in [dict, list, tuple, set]:
                 ret = Config(ret, path_from_root=self._path_from_root + [item], file_path=self._file_path)
 
             return ret
