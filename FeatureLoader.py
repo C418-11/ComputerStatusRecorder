@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.2Dev"
+__version__ = "0.0.3Dev"
 
 import importlib
 import os.path
@@ -52,6 +52,35 @@ def _load(name: str, import_path: str):
         return None
 
 
+def _get_details(module):
+    detail_dict = {}
+
+    for attr in ("__author__", "__description__", "__version__"):
+        value = getattr(module, attr, None)
+
+        if value is not None:
+            detail_dict[attr] = value
+
+    return detail_dict
+
+
+def _show_details(module):
+    details = _get_details(module)
+
+    if not details:
+        print("  No details available")
+        return
+
+    key_map = {
+        "__author__": "Auther",
+        "__description__": "Desc",
+        "__version__": "Ver"
+    }
+
+    for attr, value in details.items():
+        print(f"  {key_map[attr]}: {value}")
+
+
 def load_default_features():
     lib_path = os.path.join(os.path.dirname(__file__), "DefaultFeatures")
     sys.path.append(lib_path)
@@ -65,6 +94,8 @@ def load_default_features():
         if '|' in feature:
             feature = feature.split('|')[1]
         loaded_features[feature] = _load(feature, "DefaultFeatures")
+
+        _show_details(loaded_features[feature])
 
     return loaded_features
 
@@ -94,6 +125,8 @@ def load_other_features():
             continue
 
         loaded_features[feature] = _load(feature, "Features")
+
+        _show_details(loaded_features[feature])
 
     return loaded_features
 

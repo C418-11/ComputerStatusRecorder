@@ -64,11 +64,12 @@ import Features.{键名}
 # cython: language_level = 3
 ```
 
-在后续版本可能会用到的可选变量
+可选变量 当前版本下会在加载功能时在控制台显示
 
 ```python
 __author__ = "C418____11 <553515788@qq.com>"  # 此功能作者
 __version__ = "0.0.1Dev"  # 此功能的版本
+__description__ = "This is a example feature"  # 此功能的描述
 ```
 
 #### 2.2.2 编写GUI页面
@@ -104,6 +105,10 @@ class HelloWorld(AbcUI):
     
     # 当父控件大小改变时, 会调用这个方法, 用于调整子控件大小
     def ReScale(self, x_scale: float, y_scale: float):
+        ...
+        
+    # 当程序退出时会调用这个方法
+    def exit(self):
         ...
         
     # 返回的值越小 页面越靠前
