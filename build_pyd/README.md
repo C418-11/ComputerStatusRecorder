@@ -6,8 +6,8 @@
 
 为了后续编译你的代码 你需要额外安装以下库：
 
-* _setuptools 69.0.3_
-* _Cython 3.0.8_
+* _setuptools 69.1.1_
+* _Cython 3.0.9_
 * _pyinstaller 6.4.0_
 
 完整的依赖在当前目录下的[`requirements.txt (点击打开)`](./requirements.txt)文件中。
