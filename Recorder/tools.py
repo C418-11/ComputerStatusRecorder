@@ -25,7 +25,9 @@ def pack_timestamp_que(que, fmt=PackFmt.Int):
     if not isinstance(fmt, PackFmt):
         raise TypeError("fmt must be PackFmt")
 
-    ls = []
+    file_head = b'Q|' + fmt.value.encode() + b'\n'  # 文件头记录文件解码格式
+
+    ls = [file_head]
 
     for timestamp, value in que:
 
