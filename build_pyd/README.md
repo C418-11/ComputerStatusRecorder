@@ -50,6 +50,22 @@ HelloWorld: True
 import Features.{键名}
 ```
 
+在键名前面加上字符`|`可以在不影响正常加载的情况下调整加载顺序， 例如：
+
+```yaml
+2|FileA: True
+3|FileB: True
+1|FileC: True
+```
+
+那么加载器看到的是
+
+```yaml
+FileC: true
+FileA: true
+FileB: true
+```
+
 ### 2.2 编写代码
 
 #### 2.2.1 编写文件基础描述

@@ -14,18 +14,24 @@ from Lib.Configs import read_default_yaml, BASE_PATH
 DefaultFeatures = read_default_yaml(
     os.path.join(BASE_PATH, "DefaultFeatures.yaml"),
     {
-        "1|NetWorkTraffic": True,  # 这里的 '|' 是为了保证写入顺序 (实测发现yaml写入顺序与dict不一致, 疑似做了排序)
-        "2|Memory": True,  # 这里保证写入顺序的主要原因是加载顺序敏感, 会导致界面的显示顺序不一致
+        "1|NetWorkTraffic": True,  # 这里的 '|' 是为了读取后进行排序
+        "2|Memory": True,
         "3|WindowTop": True,
         "4|Opacity": True,
+        "5|RecordReader": True
     }
 )
+
+
+DefaultFeatures.sort()
 
 
 def _load(name: str, import_path: str):
     try:
         module = importlib.import_module(f"{import_path}.{name}")
         print("Feature loaded successfully:", name)
+
+        _show_details(module)
         return module
     except ImportError as err:
         c = re.compile(r"No\smodule\snamed\s'([^']+)'")
@@ -42,7 +48,7 @@ def _load(name: str, import_path: str):
             return None
 
         if err_module == f"{import_path}.{name}":
-            print("Feature not found:", name)
+            print("Feature not found:", f"{import_path}.{name}")
             return None
 
         print(f"Unable to load Feature '{name}', dependencies may not be installed: '{err_module}'")
@@ -95,8 +101,6 @@ def load_default_features():
             feature = feature.split('|')[1]
         loaded_features[feature] = _load(feature, "DefaultFeatures")
 
-        _show_details(loaded_features[feature])
-
     return loaded_features
 
 
@@ -107,6 +111,9 @@ OtherFeatures = read_default_yaml(
         "HelloWorld": False
     }
 )
+
+
+OtherFeatures.sort()
 
 
 def load_other_features():
@@ -123,12 +130,12 @@ def load_other_features():
             print("Feature disabled:", feature)
             loaded_features[feature] = None
             continue
+        if '|' in feature:
+            feature = feature.split('|')[1]
 
         loaded_features[feature] = _load(feature, "Features")
-
-        _show_details(loaded_features[feature])
 
     return loaded_features
 
 
-__all__ = ("DefaultFeatures", "load_default_features",)
+__all__ = ("DefaultFeatures", "load_default_features", "OtherFeatures", "load_other_features")
