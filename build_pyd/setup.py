@@ -79,8 +79,11 @@ class PyToPyd:
         )
 
     def make_all(self, dir_path, sub_path: str = ''):
+        root_dir = os.path.dirname(dir_path)
+
         for path in _get_all_extension_files(dir_path):
-            self.make(path, sub_path=sub_path)
+            to_path = sub_path + str(os.path.relpath(os.path.dirname(path), root_dir))
+            self.make(path, sub_path=to_path)
 
 
 def _rename_file(file_name, replace, to):
