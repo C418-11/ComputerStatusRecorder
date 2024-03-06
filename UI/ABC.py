@@ -14,6 +14,9 @@ class AbcUI(ABC):
     def ReScale(self, x_scale: float, y_scale: float):
         ...
 
+    def exit(self):
+        ...
+
     @abstractmethod
     def setupUi(self):
         ...

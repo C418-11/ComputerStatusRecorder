@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.2Dev"
+__version__ = "0.0.3Dev"
 
 import traceback
 import warnings
@@ -74,13 +74,13 @@ class UiMain:
         self.MinButton: QPushButton | None = None
         self.ExitButton: QPushButton | None = None
 
-        self.top_tabs = []
+        self.top_tabs: list[AbcUI] = []
 
-    def append(self, widget: type[AbcUI]):
-        widget = widget(self.TopTab)
-        widget.setupUi()
-        self.TopTab.addTab(widget.getMainWidget(), widget.getTagName())
-        self.top_tabs.append(widget)
+    def append(self, subpage: type[AbcUI]):
+        subpage = subpage(self.TopTab)
+        subpage.setupUi()
+        self.TopTab.addTab(subpage.getMainWidget(), subpage.getTagName())
+        self.top_tabs.append(subpage)
 
     @showException
     def _MinSlot(self, *_, **__):
@@ -106,6 +106,21 @@ class UiMain:
             self.Widget.showMaximized()
             self.MaxNormalButton.setText(u"Normal")
 
+    @showException
+    def _ExitSlot(self, *_, **__):
+        self.Widget.close()
+
+        for tab in self.top_tabs:
+            try:
+                func = tab.exit
+            except AttributeError:
+                continue
+
+            try:
+                func()
+            except Exception as e:
+                traceback.print_exception(e)
+
     def setupUi(self):
         self.TopTab = QTabWidget(self.Widget)
         self.TopTab.setObjectName(u"TopTab")
@@ -116,7 +131,7 @@ class UiMain:
         self.CtrlBar = QWidget(self.Widget)
         self.CtrlBar.setObjectName(u"CtrlBar")
 
-        self.MenuBar = CustomQMenuBar(self.CtrlBar, move=self.Widget.move)
+        self.MenuBar = CustomQMenuBar(self.CtrlBar, move=self.SafeMove)
         self.MenuBar.setObjectName(u"Menu")
 
         self.ExitButton = QPushButton(self.CtrlBar)
@@ -135,7 +150,7 @@ class UiMain:
         self.ReTranslateUi()
 
         # noinspection PyUnresolvedReferences
-        self.ExitButton.clicked.connect(self.Widget.close)
+        self.ExitButton.clicked.connect(self._ExitSlot)
         # noinspection PyUnresolvedReferences
         self.MinButton.clicked.connect(self._MinSlot)
         # noinspection PyUnresolvedReferences
@@ -147,6 +162,21 @@ class UiMain:
 
         # noinspection PyArgumentList
         QMetaObject.connectSlotsByName(self.Widget)
+
+    @showException
+    def SafeMove(self, *point):
+
+        pos = QPoint(*point)
+
+        x, y = pos.x(), pos.y()
+
+        # 保持窗口在屏幕内
+        screen_size = self.Widget.screen().size()
+
+        x = max(min(x, screen_size.width() - self.Widget.width()), 0)
+        y = max(min(y, screen_size.height() - self.CtrlBar.height()), 0)
+
+        self.Widget.move(x, y)
 
     @showException
     def AutoResize(self, x_scale: float, y_scale: float):
@@ -174,7 +204,6 @@ class UiMain:
                 func(x_scale, y_scale)
             except Exception as e:
                 traceback.print_exception(e)
-                pass
 
     def ReTranslateUi(self):
         self.Widget.setWindowTitle(u"StatusRecorder")
