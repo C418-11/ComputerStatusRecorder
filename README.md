@@ -11,6 +11,8 @@
 
 ### 可配置项
 
+* 窗口透明度
+* 窗口置顶
 * 记录间隔
 * 最大记录量
 * 可自己写功能 [`如何制作你的功能 (点击打开)`](./build_pyd/README.md)
@@ -21,11 +23,7 @@
 
 ### 项目依赖
 
-* _PyQt5 5.15.10_
-* psutil 5.9.8
-* _**colorama 0.4.6**_
-* _matplotlib 3.8.2_
-* _PYYAML 6.0.1_
+[`requirements.txt (点击打开)`](./requirements.txt)
 
 ```commandline
 pip install -r requirements.txt
