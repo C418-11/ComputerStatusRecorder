@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.6Dev"
+__version__ = "0.0.6Release"
 
 import os
 import sys
