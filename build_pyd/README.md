@@ -283,11 +283,10 @@ register(HelloWorld)
 1: Pyd Default Features, 2: Pyd Other Features, 3: Print Depends, 4: Exit
 ```
 
-输入 `2` 将会开始编译并将结果保存到 [`./Build/pyd/OtherFeatures (点击打开)`](./Build/pyd/OtherFeatures)目录下
+输入 `2` 将会开始编译并将结果保存到 [`./Build/pyd/Features (点击打开)`](./Build/pyd/Features)目录下
 
-如果文件树丢失， 需按照源.py文件的文件树为.pyd文件创建文件树
-
-将新创建的pyd文件树放入从发布包中解压的文件树中的/_internal/Features目录下
+将[`./Build/pyd/Features (点击打开)`](./Build/pyd/Features)文件夹内的文件放入
+解压后发布包文件树中的/_internal/Features目录下
 
 ``` text
 解压后的文件树：
@@ -299,7 +298,7 @@ register(HelloWorld)
     │   └── Opacity.pyd
     └── Features
         ├── HelloWord.pyd
-        └── 你新创建的文件树
+        └── 其他.pyd
 ```
 
 ### 4.2 编译主程序

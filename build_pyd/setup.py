@@ -117,21 +117,18 @@ def _main():
         _rename_all(compiler.pyd_path, r".cp312-win_amd64", r"")
 
     def b():
-        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Features", "OtherFeatures")
+        compiler.make_all(r"D:\source_code\python\ComputerStatusRecorder\Features")
         _rename_all(compiler.pyd_path, r".cp312-win_amd64", r"")
 
-    match int(type_):
-        case 1:
-            a()
-        case 2:
-            b()
-        case 3:
-            for dep, ver in _get_dependency_versions().items():
-                print(f"{dep}=={ver}")
-        case 4:
-            exit()
-        case _:
-            print("Unknown type")
+    if '1' in type_:
+        a()
+    if '2' in type_:
+        b()
+    if '3' in type_:
+        for dep, ver in _get_dependency_versions().items():
+            print(f"{dep}=={ver}")
+    if '4' in type_:
+        exit()
 
 
 if __name__ == "__main__":
