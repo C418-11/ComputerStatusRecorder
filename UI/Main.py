@@ -163,6 +163,9 @@ class UiMain:
         # noinspection PyArgumentList
         QMetaObject.connectSlotsByName(self.Widget)
 
+        # noinspection PyUnresolvedReferences
+        self.TopTab.currentChanged.connect(lambda *_: self.AutoResize(self.Widget.scaleWidth, self.Widget.scaleHeight))
+
     @showException
     def SafeMove(self, *point):
 
@@ -195,15 +198,19 @@ class UiMain:
         self.TopTab.resize(self.Widget.width(), self.Widget.height() - self.CtrlBar.height())
         self.TopTab.move(0, self.CtrlBar.height())
 
-        for tab in self.top_tabs:
-            try:
-                func = tab.ReScale
-            except AttributeError:
-                continue
-            try:
-                func(x_scale, y_scale)
-            except Exception as e:
-                traceback.print_exception(e)
+        try:
+            feature_obj = self.top_tabs[self.TopTab.currentIndex()]
+        except IndexError:
+            return
+
+        try:
+            func = feature_obj.ReScale
+        except AttributeError:
+            return
+        try:
+            func(x_scale, y_scale)
+        except Exception as e:
+            traceback.print_exception(e)
 
     def ReTranslateUi(self):
         self.Widget.setWindowTitle(u"StatusRecorder")
