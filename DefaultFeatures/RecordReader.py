@@ -79,7 +79,7 @@ class RecordReader(AbcUI):
         self.OpenFileBtn = QPushButton(self.widget)
         self.OpenFileBtn.setText("Open File")
         # noinspection PyUnresolvedReferences
-        self.OpenFileBtn.clicked.connect(self._openfile)
+        self.OpenFileBtn.clicked.connect(lambda *_: self._openfile())
 
         self.FileNameLabel = QLabel(self.widget)
         self.FileNameLabel.setFont(QFont(FontFamily, SmallFont))
