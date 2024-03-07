@@ -2,7 +2,7 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.2Bata"
+__version__ = "0.0.2Alpha"
 
 import os
 from collections import OrderedDict
@@ -75,6 +75,9 @@ class Config:
 
     def keys(self):
         return self._config.keys()
+
+    def __len__(self):
+        return len(self._config)
 
     def __repr__(self):
         return f"<Config raw={self._config} path={self._path_from_root} file={self._file_path}>"
