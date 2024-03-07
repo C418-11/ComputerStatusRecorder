@@ -57,6 +57,10 @@ def main():
     # noinspection PyUnresolvedReferences
     widget.setWindowFlags(Qt.CustomizeWindowHint)
     widget.show()
+
+    if len(ui.top_tabs) > 0 and hasattr(ui.top_tabs[0], "ReScale"):
+        ui.top_tabs[0].ReScale(widget.scaleWidth, widget.scaleHeight)
+
     sys.exit(app.exec_())
 
 
