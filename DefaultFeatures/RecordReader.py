@@ -58,8 +58,6 @@ class RecordReader(AbcUI):
 
         self.base_size: QSize | None = None
 
-        self._inited_ui = False
-
     def _openfile(self):
         root_dir = "./.record"
         if not os.path.exists(root_dir):
@@ -164,10 +162,6 @@ class RecordReader(AbcUI):
         return "Record Reader"
 
     def ReScale(self, x_scale: float, y_scale: float):
-        if not self._inited_ui:
-            self.widget.resize(self._parent.width() - 6, self._parent.height() - 25)
-            self._inited_ui = True
-
         self.OpenFileBtn.resize(int(100 * x_scale), int(30 * y_scale))
         self.OpenFileBtn.move(
             int((self.widget.width() - self.OpenFileBtn.width()) / 2),
