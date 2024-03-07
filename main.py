@@ -2,19 +2,20 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.6Release"
+__version__ = "0.0.7Dev"
 
 import os
 import sys
 import traceback
 
 import colorama
+from tqdm import tqdm
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 
 import FeatureLoader
-from Lib import StdColor
 from Lib.Configs import read_default_yaml, BASE_PATH
+from Lib.StdColor import ColorWrite
 from UI import RegisterUI
 from UI.BaseWidgets import GetScale
 from UI.Main import UiMain
@@ -45,14 +46,15 @@ def main():
     RegisterUI.menu.sort(key=lambda x: x.priority())
     RegisterUI.widgets.sort(key=lambda x: x.priority())
 
-    for Menu in RegisterUI.menu:
+    _write = ColorWrite(sys.stdout, colorama.Fore.LIGHTCYAN_EX)
+
+    for Menu in tqdm(RegisterUI.menu, leave=True, file=_write, desc="Registering menus", unit="Menu"):
         menu = Menu(ui.MenuBar, widget)
         menu.setupUi()
         ui.MenuBar.addMenu(menu.getMenuWidget())
 
-    for w in RegisterUI.widgets:
+    for w in tqdm(RegisterUI.widgets, leave=True, file=_write, desc="Registering pages", unit="Page"):
         ui.append(w)
-        pass
 
     # noinspection PyUnresolvedReferences
     widget.setWindowFlags(Qt.CustomizeWindowHint)
@@ -65,12 +67,11 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.stdout = StdColor.ColorWrite(sys.__stdout__, colorama.Fore.LIGHTGREEN_EX)
-    print(f"Version: {__version__}")
-    print(f"Author: {__author__}")
-    print(f"版本号: {__version__}")
-    print(f"作者: {__author__}")
-    sys.stdout = StdColor.ColorWrite(sys.__stdout__, colorama.Fore.LIGHTYELLOW_EX)
+    _green_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTGREEN_EX)
+    print(f"Version: {__version__}", file=_green_write)
+    print(f"Author: {__author__}", file=_green_write)
+    print(f"版本号: {__version__}", file=_green_write)
+    print(f"作者: {__author__}", file=_green_write)
     main()
 
 __all__ = ("main",)

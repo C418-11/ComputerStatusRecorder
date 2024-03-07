@@ -2,13 +2,15 @@
 # cython: language_level = 3
 
 __author__ = "C418____11 <553515788@qq.com>"
-__version__ = "0.0.3Dev"
+__version__ = "0.0.3Bata"
 
 import importlib
 import os.path
 import re
 import sys
 
+import colorama
+from Lib.StdColor import ColorWrite
 from Lib.Configs import read_default_yaml, BASE_PATH
 
 DefaultFeatures = read_default_yaml(
@@ -26,10 +28,15 @@ DefaultFeatures = read_default_yaml(
 DefaultFeatures.sort()
 
 
+_yellow_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTYELLOW_EX)
+_blue_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTBLUE_EX)
+_red_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTRED_EX)
+
+
 def _load(name: str, import_path: str):
     try:
         module = importlib.import_module(f"{import_path}.{name}")
-        print("Feature loaded successfully:", name)
+        print("Feature loaded successfully:", name, file=_yellow_write)
 
         _show_details(module)
         return module
@@ -38,23 +45,23 @@ def _load(name: str, import_path: str):
         err_module = c.findall(str(err))
 
         if (not err_module) or len(err_module) != 1:
-            print("Unable to load Feature:", name, " reason:", err)
+            print("Unable to load Feature:", name, " reason:", err, file=_red_write)
             return None
 
         err_module = err_module[0]
 
         if err_module == import_path:
-            print("Feature not found:", f"{import_path}.{name}")
+            print("Feature not found:", f"{import_path}.{name}", file=_blue_write)
             return None
 
         if err_module == f"{import_path}.{name}":
-            print("Feature not found:", f"{import_path}.{name}")
+            print("Feature not found:", f"{import_path}.{name}", file=_blue_write)
             return None
 
-        print(f"Unable to load Feature '{name}', dependencies may not be installed: '{err_module}'")
+        print(f"Unable to load Feature '{name}', dependencies may not be installed: '{err_module}'", file=_red_write)
         return None
     except Exception as err:
-        print("Unable to load Feature:", name, " reason:", err)
+        print("Unable to load Feature:", name, " reason:", err, file=_red_write)
         return None
 
 
@@ -74,7 +81,7 @@ def _show_details(module):
     details = _get_details(module)
 
     if not details:
-        print("  No details available")
+        print("  No details available", file=_yellow_write)
         return
 
     key_map = {
@@ -84,7 +91,7 @@ def _show_details(module):
     }
 
     for attr, value in details.items():
-        print(f"  {key_map[attr]}: {value}")
+        print(f"  {key_map[attr]}: {value}", file=_yellow_write)
 
 
 def load_default_features():
@@ -94,7 +101,7 @@ def load_default_features():
     loaded_features = {}
     for feature in DefaultFeatures:
         if not bool(DefaultFeatures[feature]):
-            print("Feature disabled:", feature)
+            print("Feature disabled:", feature, file=_blue_write)
             loaded_features[feature] = None
             continue
         if '|' in feature:
@@ -123,11 +130,11 @@ def load_other_features():
     loaded_features = {}
     for feature in OtherFeatures:
         if feature == "YourFeatureName":
-            print("YourFeatureName is a reserved keyword, please change it to another name.")
+            print("YourFeatureName is a reserved keyword, please change it to another name.", file=_red_write)
             continue
 
         if not bool(OtherFeatures[feature]):
-            print("Feature disabled:", feature)
+            print("Feature disabled:", feature, file=_blue_write)
             loaded_features[feature] = None
             continue
         if '|' in feature:
