@@ -59,8 +59,7 @@ class Memory(AbcUI):
 
     def __init__(self, parent: QTabWidget):
         super().__init__(parent)
-        self.Widget = parent
-        self.tag_widget: QWidget | None = None
+        self.widget: QWidget | None = None
 
         self.TextLabel: QLabel | None = None
 
@@ -150,7 +149,7 @@ class Memory(AbcUI):
         self.SaveFileButton.resize(int(100 * x_scale), int(30 * y_scale))
         self.SavePlotButton.resize(int(100 * x_scale), int(30 * y_scale))
 
-        self.SaveFileButton.move(0, self.plot_widget.height() - self.SavePlotButton.height())
+        self.SaveFileButton.move(0, self.widget.height() - self.SavePlotButton.height())
 
         self.SavePlotButton.move(
             self.SaveFileButton.width(),
@@ -161,9 +160,9 @@ class Memory(AbcUI):
 
     @override
     def setupUi(self):
-        self.tag_widget = QWidget(self.Widget)
-        self.tag_widget.setObjectName("Memory")
-        self.plot_widget = MatplotlibWidget(self.tag_widget)
+        self.widget = QWidget(self._parent)
+        self.widget.setObjectName("Memory")
+        self.plot_widget = MatplotlibWidget(self.widget)
         self.plot_widget.setObjectName("MemoryPlot")
 
         self.plot_widget.move(0, 0)
@@ -171,16 +170,16 @@ class Memory(AbcUI):
         self.base_wh = MinimumSize[0] - 10, MinimumSize[1] - 50
         self.plot_widget.resize(*self.base_wh)
 
-        self.TextLabel = QLabel(self.tag_widget)
+        self.TextLabel = QLabel(self.widget)
         self.TextLabel.setFont(QFont(FontFamily, TitleFont))
         self.TextLabel.setObjectName("MemoryLabel")
         self.TextLabel.setAlignment(Qt.AlignCenter)
 
-        self.SaveFileButton = QPushButton(self.tag_widget)
+        self.SaveFileButton = QPushButton(self.widget)
         self.SaveFileButton.setObjectName("SaveFileButton")
         self.SaveFileButton.setText("Save File")
 
-        self.SavePlotButton = QPushButton(self.tag_widget)
+        self.SavePlotButton = QPushButton(self.widget)
         self.SavePlotButton.setObjectName("SavePlotButton")
         self.SavePlotButton.setText("Save Plot")
 
@@ -250,11 +249,11 @@ class Memory(AbcUI):
 
     @override
     def getMainWidget(self):
-        return self.tag_widget
+        return self.widget
 
     @override
     def getTagName(self):
-        return self.tag_widget.objectName()
+        return self.widget.objectName()
 
     @staticmethod
     @override

@@ -143,10 +143,8 @@ from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget
 
 class HelloWorld(AbcUI):
     def __init__(self, _parent: QTabWidget):
-        # 当前版本这行不必要, 只是为了让PyCharm不爆黄
         super().__init__(_parent)
 
-        self._parent = _parent
         self.widget: QWidget | None = None
         self.Label: QLabel | None = None
         self.base_size: QSize | None = None
@@ -212,10 +210,8 @@ from UI.RegisterUI import register
 # 继承抽象类，实现具体功能
 class HelloWorld(AbcUI):
     def __init__(self, _parent: QTabWidget):
-        # 当前版本这行不必要, 只是为了让PyCharm不爆黄
         super().__init__(_parent)
 
-        self._parent = _parent
         self.widget: QWidget | None = None
         self.Label: QLabel | None = None
         self.base_size: QSize | None = None

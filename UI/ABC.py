@@ -9,7 +9,8 @@ from PyQt5.QtWidgets import *
 
 
 class AbcUI(ABC):
-    def __init__(self, _parent: QTabWidget): ...
+    def __init__(self, _parent: QTabWidget):
+        self._parent = _parent
 
     def ReScale(self, x_scale: float, y_scale: float):
         ...
