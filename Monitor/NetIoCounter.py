@@ -17,8 +17,6 @@ class CounterMode(StrEnum):
 
 
 class NetIoCounter(ABCMonitor):
-    reader = functools.partial(psutil.net_io_counters, pernic=False)
-
     bytes_recv: int | dict[str, int]
     bytes_sent: int | dict[str, int]
 
@@ -33,6 +31,13 @@ class NetIoCounter(ABCMonitor):
 
     def __init__(self, mode: CounterMode = CounterMode.TOTAL):
         self.mode = CounterMode(mode)
+
+        if self.mode == CounterMode.EVERY:
+            self.reader = functools.partial(psutil.net_io_counters, pernic=True)
+        elif self.mode == CounterMode.TOTAL:
+            self.reader = functools.partial(psutil.net_io_counters, pernic=False)
+        else:
+            raise ValueError("Unknown counter mode")
 
         self._v_bytes_recv = None
         self._v_bytes_sent = None
