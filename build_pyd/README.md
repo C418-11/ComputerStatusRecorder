@@ -10,6 +10,10 @@
 * _Cython 3.0.9_
 * _pyinstaller 6.4.0_
 
+可选: 
+
+* _Pillow 10.2.0_
+
 完整的依赖在当前目录下的[`requirements.txt (点击打开)`](./requirements.txt)文件中。
 
 你可以在 [`**当前目录**`](.) 下使用以下命令安装：
@@ -300,6 +304,12 @@ register(HelloWorld)
 ### 4.2 编译主程序
 
 在本项目根目录下用命令行执行以下命令
+
+```commandline
+pyinstaller main.py -D --clean --hide-console hide-early -i "path/to/your/icon/file.ico" -n StatusRecorder
+```
+
+如果你安装了Pillow库 那么你可以直接指定图标为png或jpg文件
 
 ```commandline
 pyinstaller main.py -D --clean --hide-console hide-early -i "path/to/your/image/file.png" -n StatusRecorder
