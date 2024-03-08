@@ -25,11 +25,13 @@ class Memory(ABCMonitor):
 
     @override
     def update_data(self):
-        self._v_total = psutil.virtual_memory().total
-        self._v_used = psutil.virtual_memory().used
-        self._v_free = psutil.virtual_memory().free
-        self._v_available = psutil.virtual_memory().available
-        self._v_percent = psutil.virtual_memory().percent
+        memory = psutil.virtual_memory()
+
+        self._v_total = memory.total
+        self._v_used = memory.used
+        self._v_free = memory.free
+        self._v_available = memory.available
+        self._v_percent = memory.percent
 
     @update_check
     @override
