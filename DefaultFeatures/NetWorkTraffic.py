@@ -11,13 +11,22 @@ import warnings
 from threading import Thread
 from typing import override
 
-from PyQt5.QtCore import Qt, QUrl
-from PyQt5.QtGui import QDesktopServices, QFont
-from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QLabel, QPushButton
+from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtWidgets import QWidget
 
-from Lib.Configs import read_default_yaml, BASE_PATH, MinimumSize
-from Lib.Configs import FontFamily, SmallFont, TitleFont
+from Lib.Configs import BASE_PATH
+from Lib.Configs import FontFamily
+from Lib.Configs import MinimumSize
+from Lib.Configs import SmallFont
+from Lib.Configs import TitleFont
+from Lib.Configs import read_default_yaml
 from Recorder.NetworkIoTraffic import NetIoTraffic
 from Recorder.tools import time_str as _time_str
 from UI.ABC import AbcUI

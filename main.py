@@ -9,12 +9,13 @@ import sys
 import traceback
 
 import colorama
-from tqdm import tqdm
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
+from tqdm import tqdm
 
 import FeatureLoader
-from Lib.Configs import read_default_yaml, BASE_PATH
+from Lib.Configs import BASE_PATH
+from Lib.Configs import read_default_yaml
 from Lib.StdColor import ColorWrite
 from UI import RegisterUI
 from UI.BaseWidgets import GetScale

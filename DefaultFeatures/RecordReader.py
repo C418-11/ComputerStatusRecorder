@@ -7,19 +7,23 @@ __version__ = "0.0.1Dev"
 import csv
 import os
 import struct
+import time
 
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QTabWidget, QWidget, QPushButton, QLabel, QMessageBox
 from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtWidgets import QWidget
 
+from Lib.Configs import FontFamily
+from Lib.Configs import SmallFont
 from UI.ABC import AbcUI
 from UI.RegisterUI import register
-
-from Lib.Configs import FontFamily, SmallFont
 from UI.tools import showException
-
-import time
 
 
 def _record_reader(_file_path):

@@ -8,7 +8,9 @@ __description__ = "Window topping"
 from typing import override
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMenu, QWidget, QMenuBar
+from PyQt5.QtWidgets import QMenu
+from PyQt5.QtWidgets import QMenuBar
+from PyQt5.QtWidgets import QWidget
 
 from UI.ABC import AbcMenu
 from UI.RegisterUI import register_menu

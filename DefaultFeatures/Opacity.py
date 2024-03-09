@@ -9,7 +9,8 @@ import time
 import uuid
 from typing import override
 
-from PyQt5.QtWidgets import QApplication, QMenu
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QMenu
 
 from UI.ABC import AbcMenu
 from UI.RegisterUI import register_menu

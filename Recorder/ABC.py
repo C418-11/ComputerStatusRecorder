@@ -2,7 +2,8 @@
 # cython: language_level = 3
 
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 
 
 class ABCRecorder(ABC):

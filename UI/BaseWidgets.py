@@ -4,12 +4,28 @@
 from collections import deque
 from dataclasses import dataclass
 from enum import Enum
-from math import cos, pi
-from typing import Optional, override
+from math import cos
+from math import pi
+from typing import Optional
+from typing import override
 
-from PyQt5.QtCore import QDateTime, Qt, QTimer, QPoint, QRectF, QSize, pyqtSignal
-from PyQt5.QtGui import QWheelEvent, QColor, QPainter, QPainterPath, QBrush, QResizeEvent
-from PyQt5.QtWidgets import QApplication, QScrollArea, QWidget, QVBoxLayout
+from PyQt5.QtCore import QDateTime
+from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QRectF
+from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QBrush
+from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QPainter
+from PyQt5.QtGui import QPainterPath
+from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtGui import QWheelEvent
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QScrollArea
+from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtWidgets import QWidget
 
 from .tools import showException
 

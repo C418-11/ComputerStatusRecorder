@@ -7,7 +7,8 @@ __version__ = "0.0.2Dev"
 
 from typing import Self
 
-from UI.ABC import AbcUI, AbcMenu
+from UI.ABC import AbcMenu
+from UI.ABC import AbcUI
 
 
 class OrderSet:

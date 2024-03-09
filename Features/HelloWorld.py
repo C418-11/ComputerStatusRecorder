@@ -5,7 +5,9 @@ __author__ = "C418____11 <553515788@qq.com>"
 __version__ = "0.0.1Dev"
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QTabWidget, QLabel, QWidget
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QTabWidget
+from PyQt5.QtWidgets import QWidget
 
 # 导入抽象类，用于继承
 from UI.ABC import AbcUI

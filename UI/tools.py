@@ -6,8 +6,13 @@ import traceback
 from functools import wraps
 from typing import Union
 
-from PyQt5.QtCore import Qt, QFileInfo, QSize
-from PyQt5.QtGui import QFontDatabase, QFont, QFontMetrics, QPixmap
+from PyQt5.QtCore import QFileInfo
+from PyQt5.QtCore import QSize
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFontDatabase
+from PyQt5.QtGui import QFontMetrics
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFileIconProvider
 
 

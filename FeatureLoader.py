@@ -10,8 +10,10 @@ import re
 import sys
 
 import colorama
+
+from Lib.Configs import BASE_PATH
+from Lib.Configs import read_default_yaml
 from Lib.StdColor import ColorWrite
-from Lib.Configs import read_default_yaml, BASE_PATH
 
 DefaultFeatures = read_default_yaml(
     os.path.join(BASE_PATH, "DefaultFeatures.yaml"),
@@ -24,9 +26,7 @@ DefaultFeatures = read_default_yaml(
     }
 )
 
-
 DefaultFeatures.sort()
-
 
 _yellow_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTYELLOW_EX)
 _blue_write = ColorWrite(sys.stdout, colorama.Fore.LIGHTBLUE_EX)
@@ -118,7 +118,6 @@ OtherFeatures = read_default_yaml(
         "HelloWorld": False
     }
 )
-
 
 OtherFeatures.sort()
 
